@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 项目集合模型

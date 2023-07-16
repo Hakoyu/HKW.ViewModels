@@ -1,17 +1,18 @@
 ﻿using System.Diagnostics;
+using HKW.HKWViewModels.Controls;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
-/// 列表模型,用于MVVM
+/// 组合框视图模型
 /// </summary>
 [DebuggerDisplay("{Name},Count = {ItemsSource.Count}")]
-public partial class ListBoxVM : SelectorVM<ListBoxItemVM>
+public partial class ComboBoxVM : SelectorVM<ComboBoxItemVM>
 {
     /// <summary>
     /// 构造
     /// </summary>
-    public ListBoxVM()
+    public ComboBoxVM()
     {
         ItemsSource ??= new();
     }

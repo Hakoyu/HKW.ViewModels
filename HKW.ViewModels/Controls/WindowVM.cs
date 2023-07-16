@@ -1,35 +1,37 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 窗口视图模型
 /// </summary>
 public partial class WindowVM : ObservableObject
 {
-    [ObservableProperty]
-    private object? _dataContext;
-
-    partial void OnDataContextChanged(object? value)
+    public object? DataContext
     {
-        r_dataContextProperty?.SetValue(r_window, value);
+        get => r_dataContextProperty?.GetValue(r_window);
+        set => r_dataContextProperty?.SetValue(r_window, value);
     }
-
-    [ObservableProperty]
-    private string? _title;
-
-    [ObservableProperty]
-    private object? _tag;
+    public string? Title
+    {
+        get => (string?)(r_titleProperty?.GetValue(r_window));
+        set => r_titleProperty?.SetValue(r_window, value);
+    }
+    public object? Tag
+    {
+        get => r_tagProperty?.GetValue(r_window);
+        set => r_tagProperty?.SetValue(r_window, value);
+    }
 
     private readonly object? r_window;
 
     private readonly Type? r_windowType;
 
     private readonly PropertyInfo? r_dataContextProperty;
+    private readonly PropertyInfo? r_titleProperty;
+    private readonly PropertyInfo? r_tagProperty;
 
     private readonly MethodInfo? r_showMethod;
 
@@ -43,17 +45,43 @@ public partial class WindowVM : ObservableObject
 
     private readonly EventInfo? r_closingEvent;
     private readonly EventInfo? r_closedEvent;
+
     /// <summary>
     /// 构造
+    /// <para>示例:
+    /// <code>
+    /// <![CDATA[
+    /// public partial class MainWindow : Window
+    /// {
+    ///     public MainWindow()
+    ///     {
+    ///         InitializeComponent();
+    ///         var vm = new Window1ViewModel(new Window1());
+    ///     }
+    /// }
+    /// public partial class Window1ViewModel : WindowVM
+    /// {
+    ///     public Window1ViewModel(object window) : base(window)
+    ///     {
+    ///         // 必要
+    ///         DataContext = this;
+    ///     }
+    /// }
+    /// ]]>
+    /// </code>
+    /// </para>
     /// </summary>
     /// <param name="window">窗口</param>
     public WindowVM(object window)
     {
+        ArgumentNullException.ThrowIfNull(window, nameof(window));
         r_window = window;
         // 通过反射获取window的数据
         r_windowType = window.GetType();
         // Property
         r_dataContextProperty = r_windowType.GetProperty(nameof(DataContext));
+        r_titleProperty = r_windowType.GetProperty(nameof(Title));
+        r_tagProperty = r_windowType.GetProperty(nameof(Tag));
         // Method
         r_showMethod = r_windowType.GetMethod(nameof(Show));
         r_showDialogMethod = r_windowType.GetMethod(nameof(ShowDialog));
@@ -96,7 +124,6 @@ public partial class WindowVM : ObservableObject
     /// <summary>
     /// 关闭
     /// </summary>
-    [RelayCommand]
     public void Close()
     {
         CancelEventArgs cancelEventArgs = new();
@@ -104,9 +131,9 @@ public partial class WindowVM : ObservableObject
         if (cancelEventArgs.Cancel)
             return;
         r_closeMethod?.Invoke(r_window, null);
-        EventArgs eventArgs = new();
-        OnClosed(eventArgs);
+        OnClosed(new());
     }
+
     #region Close
     /// <summary>
     /// 关闭时
@@ -118,7 +145,9 @@ public partial class WindowVM : ObservableObject
     /// 关闭后
     /// </summary>
     protected virtual void OnClosed(EventArgs e) { }
+
     private event CancelEventHandler? ClosingEvent;
+
     /// <summary>
     /// 关闭时事件
     /// </summary>
@@ -136,6 +165,7 @@ public partial class WindowVM : ObservableObject
         }
     }
     private event EventHandler? ClosedEvent;
+
     /// <summary>
     /// 关闭后事件
     /// </summary>

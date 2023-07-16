@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Threading;
 
-namespace HKW.ViewModels;
+namespace HKW.HKWViewModels;
 
 /// <summary>
 /// 可观测本地化资源实例
@@ -14,7 +16,7 @@ namespace HKW.ViewModels;
 ///     public ObservableI18n<MainWindowI18nRes> _i18n = ObservableI18n<MainWindowI18nRes>.Create(new());
 /// }
 /// ]]></code></para>
-/// <para>在xaml中使用:<code><![CDATA[    <Window.DataContext>
+/// <para>在 xaml 中使用:<code><![CDATA[    <Window.DataContext>
 ///     <local:MainWindowViewModel />
 /// </Window.DataContext>
 /// <Grid>
@@ -40,12 +42,12 @@ public class ObservableI18n<TI18nRes> : ObservableI18n
     /// <summary>
     /// 资源名称
     /// </summary>
-    public string ResName => _resName;
+    public string ResName => r_resName;
 
     /// <summary>
     /// 本地化资源
     /// </summary>
-    public TI18nRes I18nRes => (TI18nRes)_i18nRes;
+    public TI18nRes I18nRes => (TI18nRes)r_i18nRes;
 
     /// <summary>
     /// 构造
@@ -63,7 +65,7 @@ public class ObservableI18n<TI18nRes> : ObservableI18n
     public static ObservableI18n<TI18nRes> Create(TI18nRes i18nRes)
     {
         var resName = i18nRes.GetType().FullName!;
-        return ObservableI18ns.TryGetValue(resName, out var value)
+        return ObservableI18nAllRes.TryGetValue(resName, out var value)
             ? (ObservableI18n<TI18nRes>)value
             : new(i18nRes, resName);
     }
@@ -79,62 +81,47 @@ public class ObservableI18n<TI18nRes> : ObservableI18n
 
 /// <summary>
 /// 可观测本地化
+/// <para>用例:
 /// <c>ObservableI18n.Language = "zh-CN"</c>
+/// </para>
 /// </summary>
 public class ObservableI18n : INotifyPropertyChanged
 {
     /// <summary>
-    /// 资源名称
+    /// 本地化资源
     /// </summary>
-    protected object _i18nRes;
+    protected readonly object r_i18nRes;
 
     /// <summary>
     /// 本地化资源
     /// </summary>
-    protected readonly string _resName;
-
-    private static readonly Dictionary<string, object> _observableI18nTSet = new();
+    protected readonly string r_resName;
 
     /// <summary>
     /// 本地化资源实例集合
     /// </summary>
-    protected static Dictionary<string, object> ObservableI18ns => _observableI18nTSet;
+    protected static Dictionary<string, ObservableI18n> ObservableI18nAllRes { get; } = new();
 
-    private static string _language = CultureInfo.CurrentCulture.Name;
+    private static CultureInfo s_currentCulture = CultureInfo.CurrentCulture;
 
     /// <summary>
-    /// 当前语言
+    /// 当前文化
     /// </summary>
-    public static string Language
+    public static CultureInfo CurrentCulture
     {
-        get => _language;
+        get => s_currentCulture;
         set
         {
-            if (_language == value)
+            if (s_currentCulture == value)
                 return;
-            _language = value;
-            var cultureInfo = new CultureInfo(value);
-            CultureInfo.CurrentCulture = cultureInfo;
-            Thread.CurrentThread.CurrentCulture = cultureInfo;
-            Thread.CurrentThread.CurrentUICulture = cultureInfo;
-            foreach (var observableI18n in ObservableI18ns)
-            {
-                if (observableI18n.Value is not ObservableI18n i18n)
-                    return;
-                i18n.PropertyChanged?.Invoke(i18n, new(null));
-            }
+            s_currentCulture = value;
+            CultureInfo.CurrentCulture = value;
+            Thread.CurrentThread.CurrentCulture = value;
+            Thread.CurrentThread.CurrentUICulture = value;
+            foreach (var observableI18nRes in ObservableI18nAllRes.Values)
+                observableI18nRes.PropertyChanged?.Invoke(observableI18nRes, new(null));
+            CultureChanged?.Invoke(value);
         }
-    }
-
-    /// <summary>
-    /// 刷新I18n资源
-    /// </summary>
-    /// <param name="resName">资源名称</param>
-    protected static void Refresh(string resName)
-    {
-        if (ObservableI18ns[resName] is not ObservableI18n observableI18n)
-            return;
-        observableI18n.PropertyChanged?.Invoke(observableI18n, new(null));
     }
 
     /// <summary>
@@ -144,28 +131,60 @@ public class ObservableI18n : INotifyPropertyChanged
     /// <param name="resName">资源名称</param>
     protected ObservableI18n(object i18nRes, string resName)
     {
-        _i18nRes = i18nRes;
-        _resName = resName;
-        ObservableI18ns.TryAdd(resName, this);
+        r_i18nRes = i18nRes;
+        r_resName = resName;
+        ObservableI18nAllRes.TryAdd(resName, this);
     }
 
     /// <summary>
-    /// 添加属性改变委托,并刷新
+    /// 添加文化改变委托
     /// </summary>
-    /// <param name="propertyChangedAction">属性改变委托</param>
-    /// <param name="nowRefresh">立刻刷新</param>
-    public void AddPropertyChangedAction(Action propertyChangedAction, bool nowRefresh = false)
+    /// <param name="cultureChangedAction">文化改变委托</param>
+    public void AddCultureChangedAction(Action<CultureInfo> cultureChangedAction)
     {
-        if (nowRefresh)
-            propertyChangedAction();
         PropertyChanged += (s, e) =>
         {
-            propertyChangedAction();
+            cultureChangedAction(CultureInfo.CurrentCulture);
         };
     }
 
     /// <summary>
-    /// 属性更变委托
+    /// 刷新I18n资源
+    /// </summary>
+    /// <param name="resName">资源名称</param>
+    protected static void Refresh(string resName)
+    {
+        var observableI18n = ObservableI18nAllRes[resName];
+        observableI18n.PropertyChanged?.Invoke(observableI18n, new(null));
+    }
+
+    /// <summary>
+    /// 绑定两个值, 在触发 <see cref="CultureChanged"/> 时会对目标重新赋值
+    /// <para>示例:
+    /// <code>target = source</code>
+    /// 等同于:
+    /// <code><![CDATA[
+    /// ObservableI18n.BindingValue((value) => target = value, () => source);
+    /// ]]></code>
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="target">目标</param>
+    /// <param name="source">源</param>
+    /// <returns>源的返回值</returns>
+    public static T BindingValue<T>(Action<T> target, Func<T> source)
+    {
+        CultureChanged += (culture) => target(source());
+        return source();
+    }
+
+    /// <summary>
+    /// 属性改变委托
     /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    /// <summary>
+    /// 文化改变委托
+    /// </summary>
+    public static event CultureChangedEventHander? CultureChanged;
 }

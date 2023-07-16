@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace HKW.ViewModels.Dialogs;
+namespace HKW.HKWViewModels.Dialogs;
 
 /// <summary>
 /// 等待消息弹窗
 /// </summary>
 public class PendingBoxVM
 {
-    private PendingBoxVM()
-    { }
+    private PendingBoxVM() { }
 
     /// <summary>
     /// 初始化委托
@@ -65,7 +64,11 @@ public class PendingBoxVM
     /// <summary>
     /// 委托
     /// </summary>
-    public delegate PendingVMHandler ViewModelHandler(string message, string caption, bool canCancel);
+    public delegate PendingVMHandler ViewModelHandler(
+        string message,
+        string caption,
+        bool canCancel
+    );
 
     /// <summary>
     /// 事件
@@ -78,17 +81,22 @@ public class PendingBoxVM
 /// </summary>
 public class PendingVMHandler : IDisposable
 {
-    private Action _showAction;
-    private Action _hideAction;
-    private Action _closeAction;
-    private Action<string> _updateMessageAction;
+    private readonly Action r_showAction;
+    private readonly Action r_hideAction;
+    private readonly Action r_closeAction;
+    private readonly Action<string> r_updateMessageAction;
 
-    internal PendingVMHandler(Action showAction, Action hideAction, Action closeAction, Action<string> updateMessageAction)
+    public PendingVMHandler(
+        Action showAction,
+        Action hideAction,
+        Action closeAction,
+        Action<string> updateMessageAction
+    )
     {
-        _showAction = showAction;
-        _hideAction = hideAction;
-        _closeAction = closeAction;
-        _updateMessageAction = updateMessageAction;
+        r_showAction = showAction;
+        r_hideAction = hideAction;
+        r_closeAction = closeAction;
+        r_updateMessageAction = updateMessageAction;
     }
 
     /// <summary>
@@ -96,7 +104,7 @@ public class PendingVMHandler : IDisposable
     /// </summary>
     public void Show()
     {
-        _showAction();
+        r_showAction();
     }
 
     /// <summary>
@@ -104,7 +112,7 @@ public class PendingVMHandler : IDisposable
     /// </summary>
     public void Hide()
     {
-        _hideAction();
+        r_hideAction();
     }
 
     /// <summary>
@@ -112,7 +120,7 @@ public class PendingVMHandler : IDisposable
     /// </summary>
     public void Close()
     {
-        _closeAction();
+        r_closeAction();
     }
 
     /// <summary>
@@ -121,7 +129,7 @@ public class PendingVMHandler : IDisposable
     /// <param name="message">消息</param>
     public void UpdateMessage(string message)
     {
-        _updateMessageAction(message);
+        r_updateMessageAction(message);
     }
 
     /// <summary>
@@ -129,6 +137,7 @@ public class PendingVMHandler : IDisposable
     /// </summary>
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         Close();
     }
 

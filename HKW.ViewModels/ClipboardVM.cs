@@ -1,4 +1,4 @@
-﻿namespace HKW.ViewModels;
+﻿namespace HKW.HKWViewModels;
 
 /// <summary>
 /// 剪切板视图模型

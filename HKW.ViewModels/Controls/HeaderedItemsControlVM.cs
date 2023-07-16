@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 带多个项并且具有标题的控件模型
@@ -13,5 +13,5 @@ public partial class HeaderedItemsControlVM<T> : ItemsCollectionVM<T>
     /// 标题
     /// </summary>
     [ObservableProperty]
-    private object? header;
+    private object? _header;
 }

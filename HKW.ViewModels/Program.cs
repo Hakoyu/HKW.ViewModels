@@ -3,7 +3,7 @@ using System;
 
 #endif
 
-namespace HKW.ViewModels;
+namespace HKW.HKWViewModels;
 
 internal class Program
 {

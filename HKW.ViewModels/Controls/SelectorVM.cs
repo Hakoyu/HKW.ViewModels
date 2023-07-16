@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 选择器视图模型
@@ -14,14 +14,14 @@ public partial class SelectorVM<TItem> : ItemsCollectionVM<TItem>
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedItem))]
-    private int selectedIndex = -1;
+    private int _selectedIndex = -1;
 
     /// <summary>
     /// 选中项的值
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedIndex))]
-    private TItem? selectedItem;
+    private TItem? _selectedItem;
 
     /// <summary>
     /// 选中项改变命令

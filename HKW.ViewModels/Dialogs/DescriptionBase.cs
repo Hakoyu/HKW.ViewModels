@@ -1,4 +1,4 @@
-﻿namespace HKW.ViewModels.Dialogs;
+﻿namespace HKW.HKWViewModels.Dialogs;
 
 /// <summary>
 /// 基础描述

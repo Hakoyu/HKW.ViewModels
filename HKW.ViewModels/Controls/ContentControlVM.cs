@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 可包含任意类型内容的控件模型
@@ -10,8 +10,8 @@ namespace HKW.ViewModels.Controls;
 public partial class ContentControlVM : ControlVMBase
 {
     [ObservableProperty]
-    private object? icon;
+    private object? _icon;
 
     [ObservableProperty]
-    private object? content;
+    private object? _content;
 }

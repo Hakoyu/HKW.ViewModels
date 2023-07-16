@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Dialogs;
+namespace HKW.HKWViewModels.Dialogs;
 
 /// <summary>
 /// 消息窗口模型
@@ -12,33 +12,33 @@ public partial class MessageBoxVM : ObservableObject
     /// </summary>
     public partial class Description : ObservableObject
     {
-        #region CheckBox
+        //#region CheckBox
 
-        /// <summary>启用复选框</summary>
-        [ObservableProperty]
-        private bool showCheckBox = false;
+        ///// <summary>启用复选框</summary>
+        //[ObservableProperty]
+        //private bool _showCheckBox = false;
 
-        /// <summary>复选框信息</summary>
-        [ObservableProperty]
-        private string? checkBoxMessage;
+        ///// <summary>复选框信息</summary>
+        //[ObservableProperty]
+        //private string? _checkBoxMessage;
 
-        /// <summary>复选框被点击</summary>
-        [ObservableProperty]
-        private bool checkBoxIsChecked = false;
+        ///// <summary>复选框被点击</summary>
+        //[ObservableProperty]
+        //private bool _checkBoxIsChecked = false;
 
-        #endregion CheckBox
+        //#endregion CheckBox
 
-        #region TextBox
+        //#region TextBox
 
-        /// <summary>启用文本框</summary>
-        [ObservableProperty]
-        private bool showTextBox = false;
+        ///// <summary>启用文本框</summary>
+        //[ObservableProperty]
+        //private bool _showTextBox = false;
 
-        /// <summary>文本框内容</summary>
-        [ObservableProperty]
-        private bool textBoxText = false;
+        ///// <summary>文本框内容</summary>
+        //[ObservableProperty]
+        //private bool _textBoxText = false;
 
-        #endregion TextBox
+        //#endregion TextBox
 
         /// <summary>拥有者</summary>
         public object? Owner { get; set; }
@@ -47,7 +47,7 @@ public partial class MessageBoxVM : ObservableObject
         public object? Tag { get; set; }
 
         /// <summary>标记</summary>
-        public bool ShowMainWindowBlurEffect { get; set; } = true;
+        public bool SetMainWindowBlurEffect { get; set; } = true;
 
         /// <summary>消息</summary>
         public string Message { get; private set; }
@@ -134,8 +134,7 @@ public partial class MessageBoxVM : ObservableObject
     /// <summary>
     /// 初始化
     /// </summary>
-    private MessageBoxVM()
-    { }
+    private MessageBoxVM() { }
 
     /// <summary>
     /// 初始化委托
@@ -158,8 +157,7 @@ public partial class MessageBoxVM : ObservableObject
     /// </summary>
     /// <param name="description">描述</param>
     /// <returns>结果</returns>
-    public static Result? Show(Description description) =>
-        ViewModelEvent?.Invoke(description);
+    public static Result? Show(Description description) => ViewModelEvent?.Invoke(description);
 
     /// <summary>
     /// 委托

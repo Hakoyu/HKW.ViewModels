@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 组合框项视图模型
@@ -10,11 +10,10 @@ namespace HKW.ViewModels.Controls;
 public partial class ComboBoxItemVM : ContentControlVM
 {
     [ObservableProperty]
-    private bool isSelected = false;
+    private bool _isSelected = false;
 
     /// <summary>
     /// 初始化
     /// </summary>
-    public ComboBoxItemVM()
-    { }
+    public ComboBoxItemVM() { }
 }

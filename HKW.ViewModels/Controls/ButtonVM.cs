@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 按钮视图模型
@@ -13,12 +13,10 @@ public partial class ButtonVM : ContentControlVM
     /// <summary>
     /// 构造
     /// </summary>
-    public ButtonVM()
-    {
-    }
+    public ButtonVM() { }
 
     [ObservableProperty]
-    private bool canExecute = true;
+    private bool _canExecute = true;
 
     [RelayCommand(CanExecute = nameof(CanExecute))]
     private void Button(object parameter) => CommandEvent?.Invoke(parameter);

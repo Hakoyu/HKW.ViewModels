@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 基础控件模型
@@ -14,34 +14,29 @@ public partial class ControlVMBase : ObservableObject
     /// Id
     /// </summary>
     [ObservableProperty]
-    private string? id;
+    private string? _id;
 
     /// <summary>
     /// 名称
     /// </summary>
     [ObservableProperty]
-    private string? name;
+    private string? _name;
 
     /// <summary>
     /// 标签
     /// </summary>
     [ObservableProperty]
-    private object? tag;
+    private object? _tag;
 
     /// <summary>
     /// 提示
     /// </summary>
     [ObservableProperty]
-    private object? toolTip;
+    private object? _toolTip;
 
     /// <summary>
     /// 上下文菜单
     /// </summary>
     [ObservableProperty]
-    private ContextMenuVM? contextMenu;
-
-    /// <summary>
-    /// 数据字典
-    /// </summary>
-    public Dictionary<string, object?>? DataDictionary { get; set; }
+    private ContextMenuVM? _contextMenu;
 }

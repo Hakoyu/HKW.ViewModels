@@ -3,7 +3,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 上下文菜单模型,用于MVVM
@@ -15,13 +15,13 @@ public partial class ContextMenuVM : ItemsCollectionVM<MenuItemVM>
     /// 已打开
     /// </summary>
     [ObservableProperty]
-    private bool isOpen = false;
+    private bool _isOpen = false;
 
     /// <summary>
     /// 已加载
     /// </summary>
     [ObservableProperty]
-    private bool isLoaded = false;
+    private bool _isLoaded = false;
 
     /// <summary>
     /// 初始化

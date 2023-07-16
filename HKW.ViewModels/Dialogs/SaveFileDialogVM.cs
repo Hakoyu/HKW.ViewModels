@@ -1,21 +1,16 @@
-﻿namespace HKW.ViewModels.Dialogs;
+﻿namespace HKW.HKWViewModels.Dialogs;
 
 /// <summary>
 /// 打开文件对话框
 /// </summary>
-public class OpenFileDialogVM
+public class SaveFileDialogVM
 {
     /// <summary>
     /// 描述
     /// </summary>
-    public class Description : DescriptionBase
-    {
-        /// <summary>多选</summary>
-        public bool Multiselect { get; set; } = false;
-    }
+    public class Description : DescriptionBase { }
 
-    private OpenFileDialogVM()
-    { }
+    private SaveFileDialogVM() { }
 
     /// <summary>
     /// 初始化委托
@@ -38,7 +33,7 @@ public class OpenFileDialogVM
     /// </summary>
     /// <param name="description">描述</param>
     /// <returns>选中的文件(或文件夹)</returns>
-    public static string[]? Show(Description description)
+    public static string? Show(Description description)
     {
         if (ModelEvent is not null)
             return ModelEvent(description);
@@ -50,7 +45,7 @@ public class OpenFileDialogVM
     /// </summary>
     /// <param name="description">描述</param>
     /// <returns>选中的文件(或文件夹)</returns>
-    public delegate string[] ModelHandler(Description description);
+    public delegate string ModelHandler(Description description);
 
     /// <summary>
     /// 事件

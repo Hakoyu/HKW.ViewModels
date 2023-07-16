@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Controls;
+namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 列表项视图模型
@@ -10,14 +10,13 @@ namespace HKW.ViewModels.Controls;
 public partial class ListBoxItemVM : ContentControlVM
 {
     [ObservableProperty]
-    private string? group;
+    private string? _group;
 
     [ObservableProperty]
-    private bool isSelected = false;
+    private bool _isSelected = false;
 
     /// <summary>
     /// 初始化
     /// </summary>
-    public ListBoxItemVM()
-    { }
+    public ListBoxItemVM() { }
 }
