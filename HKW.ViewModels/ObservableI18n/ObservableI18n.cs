@@ -164,18 +164,43 @@ public class ObservableI18n : INotifyPropertyChanged
     /// <code>target = source</code>
     /// 等同于:
     /// <code><![CDATA[
-    /// ObservableI18n.BindingValue((value) => target = value, () => source);
+    /// target = ObservableI18n.BindingValue((value) => target = value, () => source);
+    /// ]]></code>
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="setTargetValue">设置目标值</param>
+    /// <param name="getSourceValue">获取源值</param>
+    /// <returns>源的返回值</returns>
+    public static T BindingValue<T>(Action<T> setTargetValue, Func<T> getSourceValue)
+    {
+        CultureChanged += (culture) => setTargetValue(getSourceValue());
+        return getSourceValue();
+    }
+
+    /// <summary>
+    /// 绑定两个值, 在触发 <see cref="CultureChanged"/> 时会对目标重新赋值
+    /// <para>示例:
+    /// <code>target = source</code>
+    /// 等同于:
+    /// <code><![CDATA[
+    /// target.Value = ObservableI18n.BindingValue(target, (value, target) => target.Value = value, () => source);
     /// ]]></code>
     /// </para>
     /// </summary>
     /// <typeparam name="T">值类型</typeparam>
     /// <param name="target">目标</param>
-    /// <param name="source">源</param>
+    /// <param name="setTargetValue">设置目标值</param>
+    /// <param name="getSourceValue">获取源值</param>
     /// <returns>源的返回值</returns>
-    public static T BindingValue<T>(Action<T> target, Func<T> source)
+    public static T BindingValue<T, TTarget>(
+        TTarget target,
+        Action<T, TTarget> setTargetValue,
+        Func<T> getSourceValue
+    )
     {
-        CultureChanged += (culture) => target(source());
-        return source();
+        CultureChanged += (culture) => setTargetValue(getSourceValue(), target);
+        return getSourceValue();
     }
 
     /// <summary>
