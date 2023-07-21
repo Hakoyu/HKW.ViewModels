@@ -181,7 +181,7 @@ public class ObservableI18n : INotifyPropertyChanged
     /// <summary>
     /// 绑定两个值, 在触发 <see cref="CultureChanged"/> 时会对目标重新赋值
     /// <para>示例:
-    /// <code>target = source</code>
+    /// <code>target.Value = source</code>
     /// 等同于:
     /// <code><![CDATA[
     /// target.Value = ObservableI18n.BindingValue(target, (value, target) => target.Value = value, () => source);
@@ -189,6 +189,7 @@ public class ObservableI18n : INotifyPropertyChanged
     /// </para>
     /// </summary>
     /// <typeparam name="T">值类型</typeparam>
+    /// <typeparam name="TTarget">目标类型</typeparam>
     /// <param name="target">目标</param>
     /// <param name="setTargetValue">设置目标值</param>
     /// <param name="getSourceValue">获取源值</param>
@@ -198,9 +199,46 @@ public class ObservableI18n : INotifyPropertyChanged
         Action<T, TTarget> setTargetValue,
         Func<T> getSourceValue
     )
+        where TTarget : class
     {
         CultureChanged += (culture) => setTargetValue(getSourceValue(), target);
         return getSourceValue();
+    }
+
+    /// <summary>
+    /// 使用弱引用绑定目标, 在触发 <see cref="CultureChanged"/> 时会对目标重新赋值
+    /// <para>示例:
+    /// <code>target.Value = source</code>
+    /// 等同于:
+    /// <code><![CDATA[
+    /// target.Value = ObservableI18n.BindingValueOnWeakReference(target, (value, target) => target.Value = value, () => source);
+    /// ]]></code>
+    /// </para>
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <typeparam name="TTarget">目标类型</typeparam>
+    /// <param name="target">目标</param>
+    /// <param name="setTargetValue">设置目标值</param>
+    /// <param name="getSourceValue">获取源值</param>
+    /// <returns>源的返回值</returns>
+    public static T BindingValueOnWeakReference<T, TTarget>(
+        TTarget target,
+        Action<T, TTarget> setTargetValue,
+        Func<T> getSourceValue
+    )
+        where TTarget : class
+    {
+        var weakReference = new WeakReference<TTarget>(target);
+        CultureChanged += CultureChangedEvent;
+        return getSourceValue();
+
+        void CultureChangedEvent(CultureInfo culture)
+        {
+            if (weakReference.TryGetTarget(out var target))
+                setTargetValue(getSourceValue(), target);
+            else
+                CultureChanged -= CultureChangedEvent;
+        }
     }
 
     /// <summary>
