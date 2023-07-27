@@ -7,7 +7,7 @@ namespace HKW.HKWViewModels.Controls;
 /// 可包含任意类型内容的控件模型
 /// </summary>
 [DebuggerDisplay("{Name}, Content = {Content}")]
-public partial class ContentControlVM : ControlVMBase
+public partial class ContentControlVM : ControlVM
 {
     [ObservableProperty]
     private object? _icon;

@@ -10,7 +10,7 @@ namespace HKW.HKWViewModels.Controls;
 /// 项目集合模型
 /// </summary>
 [DebuggerDisplay("{Name},Count = {ItemsSource.Count}")]
-public partial class ItemsCollectionVM<T> : ControlVMBase
+public partial class ItemsCollectionVM<T> : ControlVM
 {
     /// <summary>
     /// 项目资源

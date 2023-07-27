@@ -25,14 +25,6 @@ public partial class ContextMenuVM : ItemsCollectionVM<MenuItemVM>
 
     /// <summary>
     /// 初始化
-    /// <para>
-    /// 如果需要使用延迟加载模式
-    /// <c>Binding</c>
-    /// 需要设置为
-    /// <c>ContextMenuVM.ItemsSource</c>
-    /// 而不是
-    /// <c>ContextMenuVM</c>
-    /// </para>
     /// </summary>
     /// <param name="handler">委托</param>
     public ContextMenuVM(LoadedHandler? handler = null)
@@ -47,14 +39,13 @@ public partial class ContextMenuVM : ItemsCollectionVM<MenuItemVM>
     /// <para>xaml示例
     /// <code><![CDATA[
     /// <i:Interaction.Triggers>
-    ///   <!--  使用Loaded时,如果有多个未载入的菜单,使用右键挨个点击只会载入第一个,故使用Opened  -->
-    ///   <i:EventTrigger EventName = "Opened" >
-    ///     < i:InvokeCommandAction Command = "{Binding ContextMenu.LoadedCommand}" />
-    ///   </ i:EventTrigger>
+    ///   <!--  使用Loaded时, 如果有多个未载入的菜单, 使用右键挨个点击只会载入第一个, 故使用Opened  -->
+    ///   <i:EventTrigger EventName="Opened">
+    ///     <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}"/>
+    ///   </i:EventTrigger>
     /// </i:Interaction.Triggers>
     /// ]]>
-    /// </code>
-    /// </para>
+    /// </code></para>
     /// </summary>
     /// <param name="parameter">参数</param>
     [RelayCommand]
@@ -62,7 +53,7 @@ public partial class ContextMenuVM : ItemsCollectionVM<MenuItemVM>
     {
         if (LoadedEvent is not null && IsLoaded is false)
         {
-            LoadedEvent(ItemsSource);
+            ItemsSource = LoadedEvent();
             IsLoaded = true;
         }
     }
@@ -71,7 +62,7 @@ public partial class ContextMenuVM : ItemsCollectionVM<MenuItemVM>
     /// 委托
     /// </summary>
     /// <param name="items">参数</param>
-    public delegate void LoadedHandler(ObservableCollection<MenuItemVM> items);
+    public delegate ObservableCollection<MenuItemVM> LoadedHandler();
 
     /// <summary>
     /// 事件
