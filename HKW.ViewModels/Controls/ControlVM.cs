@@ -2,51 +2,37 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils.Collections;
+using HKW.HKWViewModels.Controls.Interfaces;
 
 namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
 /// 基础控件模型
 /// </summary>
-[DebuggerDisplay("{Name}, Tag = {Tag}")]
-public partial class ControlVM : ObservableObject
+[DebuggerDisplay("Name = {Name}")]
+public partial class ControlVM : ObservableObject, IControlVM
 {
-    /// <summary>
-    /// Id
-    /// </summary>
+    /// <inheritdoc cref="IControlVM.Id"/>
     [ObservableProperty]
     private string? _id;
 
-    /// <summary>
-    /// 名称
-    /// </summary>
+    /// <inheritdoc cref="IControlVM.Name"/>
     [ObservableProperty]
     private string? _name;
 
-    /// <summary>
-    /// 标签
-    /// </summary>
+    /// <inheritdoc cref="IControlVM.Tag"/>
     [ObservableProperty]
     private object? _tag;
 
-    /// <summary>
-    /// 是否可见
-    /// <para>
-    /// <see langword="true"/> 为可见 <see langword="false"/> 为不可见 <see langword="null"/> 为不可见并不占用空间
-    /// </para>
-    /// </summary>
+    /// <inheritdoc cref="IControlVM.IsVisible"/>
     [ObservableProperty]
     private bool? _isVisible = true;
 
-    /// <summary>
-    /// 提示
-    /// </summary>
+    /// <inheritdoc cref="IControlVM.ToolTip"/>
     [ObservableProperty]
     private object? _toolTip;
 
-    /// <summary>
-    /// 上下文菜单
-    /// </summary>
+    /// <inheritdoc cref="IControlVM.ContextMenu"/>
     [ObservableProperty]
     private ContextMenuVM? _contextMenu;
 }

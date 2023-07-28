@@ -1,18 +1,30 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls;
+namespace HKW.HKWViewModels.Controls.Attachment;
 
 /// <summary>
-/// 按钮视图模型
+/// 菜单项模型
 /// </summary>
-[DebuggerDisplay("{Name}, Content = {Content}")]
-public partial class ButtonVM : ContentControlVM, IButtonVM, IButtonCommand
+/// <typeparam name="T">附加值类型</typeparam>
+[DebuggerDisplay(
+    "{Name}, Header = {Header}, Count = {ItemsSource.Count}, Attachment = {Attachment}"
+)]
+public partial class MenuItemVM<T>
+    : HeaderedItemsControlVM<MenuItemVM<T>, T>,
+        IHeaderedItemsControlVM<MenuItemVM<T>>,
+        IButtonCommand,
+        IIcon
 {
-    /// <inheritdoc cref="IButtonVM.CanExecute"/>
+    /// <inheritdoc cref="IIcon.Icon"/>
     [ObservableProperty]
+    private object? _icon;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ClickCommand))]
     private bool _canExecute = true;
 
     [RelayCommand(CanExecute = nameof(CanExecute))]

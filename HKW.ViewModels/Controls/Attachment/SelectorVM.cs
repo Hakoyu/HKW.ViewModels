@@ -1,17 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls;
+namespace HKW.HKWViewModels.Controls.Attachment;
 
 /// <summary>
-/// 选择器视图模型接口
+/// 选择器视图模型
 /// </summary>
 /// <typeparam name="T">项目类型</typeparam>
-[DebuggerDisplay("{Name}, SelectedIndex = {SelectedIndex}")]
-public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>
+/// <typeparam name="TAttachment">附加值类型</typeparam>
+public partial class SelectorVM<T, TAttachment> : ItemCollectionVM<T, TAttachment>, ISelectorVM<T>
 {
     /// <inheritdoc cref="ISelectorVM{T}.SelectedIndex"/>
     [ObservableProperty]

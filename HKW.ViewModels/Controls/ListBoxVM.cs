@@ -5,28 +5,13 @@ using HKW.HKWViewModels.Controls;
 namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
-/// 列表模型,用于MVVM
+/// 列表模型
 /// </summary>
-[DebuggerDisplay("{Name},Count = {ItemsSource.Count}")]
+[DebuggerDisplay("{Name}, Count = {ItemsSource.Count}")]
 public partial class ListBoxVM : SelectorVM<ListBoxItemVM>
 {
     /// <inheritdoc/>
-    public ListBoxVM()
-    {
-        ItemsSource ??= new();
-    }
-
-    /// <inheritdoc/>
-    /// <param name="itemsSource">子项</param>
-    public ListBoxVM(ObservableCollection<ListBoxItemVM>? itemsSource = null)
-    {
-        ItemsSource = itemsSource ?? new();
-    }
-
-    /// <inheritdoc/>
-    /// <param name="itemsSource">子项委托</param>
-    public ListBoxVM(Func<ObservableCollection<ListBoxItemVM>>? itemsSource = null)
-    {
-        ItemsSource = itemsSource?.Invoke() ?? new();
-    }
+    /// <param name="itemsSource">项目</param>
+    public ListBoxVM(IEnumerable<ListBoxItemVM>? itemsSource = null)
+        : base(itemsSource) { }
 }

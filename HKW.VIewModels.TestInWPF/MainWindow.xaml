@@ -63,6 +63,9 @@
         </i:Interaction.Triggers>
       </ContextMenu>
     </Grid.ContextMenu>
-
+    <Button
+      VerticalAlignment="Top"
+      Command="{Binding ButtonCommand}"
+      Content="{Binding Control.Attachment}" />
   </Grid>
 </Window>

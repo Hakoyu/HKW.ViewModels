@@ -4,16 +4,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls;
+namespace HKW.HKWViewModels.Controls.Attachment;
 
 /// <summary>
 /// 上下文菜单模型
 /// </summary>
 /// <typeparam name="T">附加值类型</typeparam>
-[DebuggerDisplay("{Name}, Count = {ItemsSource.Count}")]
-public partial class ContextMenuVM
-    : ItemCollectionVM<MenuItemVM>,
-        ILoaded<ObservableCollection<MenuItemVM>>
+[DebuggerDisplay("{Name}, Count = {ItemsSource.Count}, Attachment = {Attachment}")]
+public partial class ContextMenuVM<T>
+    : ItemCollectionVM<MenuItemVM<T>, T>,
+        ILoaded<ObservableCollection<MenuItemVM<T>>>
 {
     /// <summary>
     /// 已打开
@@ -29,7 +29,7 @@ public partial class ContextMenuVM
     /// 初始化
     /// </summary>
     /// <param name="handler">委托</param>
-    public ContextMenuVM(ILoaded<ObservableCollection<MenuItemVM>>.LoadedHandler? handler = null)
+    public ContextMenuVM(ILoaded<ObservableCollection<MenuItemVM<T>>>.LoadedHandler? handler = null)
     {
         if (handler is not null)
             LoadedEvent += handler;
@@ -60,5 +60,5 @@ public partial class ContextMenuVM
     }
 
     /// <inheritdoc cref="ILoaded{T}.LoadedEvent"/>
-    public event ILoaded<ObservableCollection<MenuItemVM>>.LoadedHandler? LoadedEvent;
+    public event ILoaded<ObservableCollection<MenuItemVM<T>>>.LoadedHandler? LoadedEvent;
 }

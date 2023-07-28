@@ -5,13 +5,15 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls;
+namespace HKW.HKWViewModels.Controls.Attachment;
 
 /// <summary>
 /// 项目集合模型
 /// </summary>
-[DebuggerDisplay("{Name}, Count = {ItemsSource.Count}")]
-public partial class ItemCollectionVM<T> : ControlVM, IItemCollectionVM<T>
+/// <typeparam name="T">项目类型</typeparam>
+/// <typeparam name="TAttachment">附加值类型</typeparam>
+[DebuggerDisplay("{Name}, Count = {ItemsSource.Count},  Attachment = {Attachment}")]
+public partial class ItemCollectionVM<T, TAttachment> : ControlVM<TAttachment>, IItemCollectionVM<T>
 {
     /// <inheritdoc cref="IItemCollectionVM.ItemsSource"/>
     [ObservableProperty]
