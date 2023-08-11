@@ -9,7 +9,7 @@ namespace HKW.HKWViewModels.Controls.Interfaces;
 /// <summary>
 /// 按钮命令接口
 /// </summary>
-public interface IButtonCommand : ICanExecute
+public interface IButtonCommandVM : ICanExecuteVM
 {
     /// <summary>
     /// 异步点击命令

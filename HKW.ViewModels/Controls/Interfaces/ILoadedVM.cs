@@ -10,7 +10,7 @@ namespace HKW.HKWViewModels.Controls.Interfaces;
 /// 加载完成接口
 /// </summary>
 ///
-public interface ILoaded<T>
+public interface ILoadedVM<T>
 {
     /// <summary>
     /// 已加载

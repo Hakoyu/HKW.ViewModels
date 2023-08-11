@@ -11,7 +11,7 @@ namespace HKW.HKWViewModels.Controls.Attachment;
 /// </summary>
 /// <typeparam name="T">附加值类型</typeparam>
 [DebuggerDisplay("{Name}, Content = {Content}, Attachment = {Attachment}")]
-public partial class ButtonVM<T> : ContentControlVM<T>, IButtonVM, IButtonCommand
+public partial class ButtonVM<T> : ContentControlVM<T>, IButtonVM, IButtonCommandVM
 {
     /// <inheritdoc cref="IButtonVM.CanExecute"/>
     [ObservableProperty]
@@ -26,7 +26,7 @@ public partial class ButtonVM<T> : ContentControlVM<T>, IButtonVM, IButtonComman
         await CommandEventAsync.Invoke(parameter);
     }
 
-    public event IButtonCommand.CommandHandler? CommandEvent;
+    public event IButtonCommandVM.CommandHandler? CommandEvent;
 
-    public event IButtonCommand.CommandHandlerAsync? CommandEventAsync;
+    public event IButtonCommandVM.CommandHandlerAsync? CommandEventAsync;
 }

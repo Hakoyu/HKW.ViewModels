@@ -8,4 +8,4 @@ namespace HKW.HKWViewModels.Controls;
 /// 组合框项视图模型
 /// </summary>
 [DebuggerDisplay("{Name}, Content = {Content}, IsSelected = {IsSelected}")]
-public partial class ComboBoxItemVM : SelectableControlVM { }
+public partial class ComboBoxItemVM : SelectableItemVM { }

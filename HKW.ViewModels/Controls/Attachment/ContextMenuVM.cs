@@ -13,7 +13,7 @@ namespace HKW.HKWViewModels.Controls.Attachment;
 [DebuggerDisplay("{Name}, Count = {ItemsSource.Count}, Attachment = {Attachment}")]
 public partial class ContextMenuVM<T>
     : ItemCollectionVM<MenuItemVM<T>, T>,
-        ILoaded<ObservableCollection<MenuItemVM<T>>>
+        ILoadedVM<ObservableCollection<MenuItemVM<T>>>
 {
     /// <summary>
     /// 已打开
@@ -21,7 +21,7 @@ public partial class ContextMenuVM<T>
     [ObservableProperty]
     private bool _isOpen = false;
 
-    /// <inheritdoc cref="ILoaded{T}.IsLoaded"/>
+    /// <inheritdoc cref="ILoadedVM{T}.IsLoaded"/>
     [ObservableProperty]
     private bool _isLoaded = false;
 
@@ -29,7 +29,9 @@ public partial class ContextMenuVM<T>
     /// 初始化
     /// </summary>
     /// <param name="handler">委托</param>
-    public ContextMenuVM(ILoaded<ObservableCollection<MenuItemVM<T>>>.LoadedHandler? handler = null)
+    public ContextMenuVM(
+        ILoadedVM<ObservableCollection<MenuItemVM<T>>>.LoadedHandler? handler = null
+    )
     {
         if (handler is not null)
             LoadedEvent += handler;
@@ -59,6 +61,6 @@ public partial class ContextMenuVM<T>
         }
     }
 
-    /// <inheritdoc cref="ILoaded{T}.LoadedEvent"/>
-    public event ILoaded<ObservableCollection<MenuItemVM<T>>>.LoadedHandler? LoadedEvent;
+    /// <inheritdoc cref="ILoadedVM{T}.LoadedEvent"/>
+    public event ILoadedVM<ObservableCollection<MenuItemVM<T>>>.LoadedHandler? LoadedEvent;
 }

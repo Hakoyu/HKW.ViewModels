@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls;
+namespace HKW.HKWViewModels.Controls.Attachment;
 
 /// <summary>
 /// 可选中的控件模型
 /// </summary>
-public partial class SelectableControlVM : ContentControlVM, ISelectableControlVM
+public partial class SelectableItemVM<T> : ContentControlVM<T>, ISelectableItemVM
 {
-    /// <inheritdoc cref="ISelectableControlVM.IsSelected"/>
+    /// <inheritdoc cref="ISelectableItemVM.IsSelected"/>
     [ObservableProperty]
     private bool _isSelected = false;
 }

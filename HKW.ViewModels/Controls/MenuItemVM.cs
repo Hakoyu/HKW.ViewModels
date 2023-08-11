@@ -13,10 +13,10 @@ namespace HKW.HKWViewModels.Controls;
 public partial class MenuItemVM
     : HeaderedItemsControlVM<MenuItemVM>,
         IHeaderedItemsControlVM<MenuItemVM>,
-        IButtonCommand,
-        IIcon
+        IButtonCommandVM,
+        IIconVM
 {
-    /// <inheritdoc cref="IIcon.Icon"/>
+    /// <inheritdoc cref="IIconVM.Icon"/>
     [ObservableProperty]
     private object? _icon;
 
@@ -33,7 +33,7 @@ public partial class MenuItemVM
         await CommandEventAsync.Invoke(parameter);
     }
 
-    public event IButtonCommand.CommandHandler? CommandEvent;
+    public event IButtonCommandVM.CommandHandler? CommandEvent;
 
-    public event IButtonCommand.CommandHandlerAsync? CommandEventAsync;
+    public event IButtonCommandVM.CommandHandlerAsync? CommandEventAsync;
 }

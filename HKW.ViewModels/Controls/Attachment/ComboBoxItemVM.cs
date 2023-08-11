@@ -8,4 +8,4 @@ namespace HKW.HKWViewModels.Controls.Attachment;
 /// </summary>
 /// <typeparam name="T">附加值类型</typeparam>
 [DebuggerDisplay("{Name}, Content = {Content}, Attachment = {Attachment}")]
-public partial class ComboBoxItemVM<T> : SelectableControlVM<T> { }
+public partial class ComboBoxItemVM<T> : SelectableItemVM<T> { }

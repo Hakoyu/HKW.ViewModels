@@ -10,6 +10,7 @@ namespace HKW.HKWViewModels.Controls.Attachment;
 /// <typeparam name="T">项目类型</typeparam>
 /// <typeparam name="TAttachment">附加值类型</typeparam>
 public partial class SelectorVM<T, TAttachment> : ItemCollectionVM<T, TAttachment>, ISelectorVM<T>
+    where T : ISelectableItemVM
 {
     /// <inheritdoc cref="ISelectorVM{T}.SelectedIndex"/>
     [ObservableProperty]

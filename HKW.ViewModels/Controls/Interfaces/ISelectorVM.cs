@@ -10,7 +10,8 @@ namespace HKW.HKWViewModels.Controls.Interfaces;
 /// 选择器视图模型接口
 /// </summary>
 /// <typeparam name="T">项目类型</typeparam>
-public interface ISelectorVM<T>
+public interface ISelectorVM<T> : IItemCollectionVM<T>
+    where T : ISelectableItemVM
 {
     /// <summary>
     /// 选中项的索引

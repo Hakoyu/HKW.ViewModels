@@ -9,7 +9,7 @@ namespace HKW.HKWViewModels.Controls;
 /// 按钮视图模型
 /// </summary>
 [DebuggerDisplay("{Name}, Content = {Content}")]
-public partial class ButtonVM : ContentControlVM, IButtonVM, IButtonCommand
+public partial class ButtonVM : ContentControlVM, IButtonVM, IButtonCommandVM
 {
     /// <inheritdoc cref="IButtonVM.CanExecute"/>
     [ObservableProperty]
@@ -24,7 +24,7 @@ public partial class ButtonVM : ContentControlVM, IButtonVM, IButtonCommand
         await CommandEventAsync.Invoke(parameter);
     }
 
-    public event IButtonCommand.CommandHandler? CommandEvent;
+    public event IButtonCommandVM.CommandHandler? CommandEvent;
 
-    public event IButtonCommand.CommandHandlerAsync? CommandEventAsync;
+    public event IButtonCommandVM.CommandHandlerAsync? CommandEventAsync;
 }

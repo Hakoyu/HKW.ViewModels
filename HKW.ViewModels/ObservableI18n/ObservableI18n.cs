@@ -37,7 +37,7 @@ namespace HKW.HKWViewModels;
 /// </summary>
 /// <typeparam name="TI18nRes">I18n资源</typeparam>
 public class ObservableI18n<TI18nRes> : ObservableI18n
-    where TI18nRes : notnull
+    where TI18nRes : class
 {
     /// <summary>
     /// 资源名称
@@ -65,13 +65,13 @@ public class ObservableI18n<TI18nRes> : ObservableI18n
     public static ObservableI18n<TI18nRes> Create(TI18nRes i18nRes)
     {
         var resName = i18nRes.GetType().FullName!;
-        return ObservableI18nAllRes.TryGetValue(resName, out var value)
+        return AllObservableI18nRes.TryGetValue(resName, out var value)
             ? (ObservableI18n<TI18nRes>)value
             : new(i18nRes, resName);
     }
 
     /// <summary>
-    /// 刷新I18n资源
+    /// 刷新当前I18n资源
     /// </summary>
     public void Refresh()
     {
@@ -100,7 +100,7 @@ public class ObservableI18n : INotifyPropertyChanged
     /// <summary>
     /// 本地化资源实例集合
     /// </summary>
-    protected static Dictionary<string, ObservableI18n> ObservableI18nAllRes { get; } = new();
+    protected static Dictionary<string, ObservableI18n> AllObservableI18nRes { get; } = new();
 
     private static CultureInfo s_currentCulture = CultureInfo.CurrentCulture;
 
@@ -118,7 +118,7 @@ public class ObservableI18n : INotifyPropertyChanged
             CultureInfo.CurrentCulture = value;
             Thread.CurrentThread.CurrentCulture = value;
             Thread.CurrentThread.CurrentUICulture = value;
-            foreach (var observableI18nRes in ObservableI18nAllRes.Values)
+            foreach (var observableI18nRes in AllObservableI18nRes.Values)
                 observableI18nRes.PropertyChanged?.Invoke(observableI18nRes, new(null));
             CultureChanged?.Invoke(value);
         }
@@ -133,7 +133,7 @@ public class ObservableI18n : INotifyPropertyChanged
     {
         r_i18nRes = i18nRes;
         r_resName = resName;
-        ObservableI18nAllRes.TryAdd(resName, this);
+        AllObservableI18nRes.TryAdd(resName, this);
     }
 
     /// <summary>
@@ -149,12 +149,12 @@ public class ObservableI18n : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// 刷新I18n资源
+    /// 刷新指定I18n资源
     /// </summary>
     /// <param name="resName">资源名称</param>
     protected static void Refresh(string resName)
     {
-        var observableI18n = ObservableI18nAllRes[resName];
+        var observableI18n = AllObservableI18nRes[resName];
         observableI18n.PropertyChanged?.Invoke(observableI18n, new(null));
     }
 

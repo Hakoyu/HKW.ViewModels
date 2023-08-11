@@ -25,6 +25,8 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
+        //RadioButton button = new();
+        //button.GroupName = "Test";
         InitializeComponent();
         DataContext = new MainWindowViewModel();
     }

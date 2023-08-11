@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace HKW.HKWViewModels.Controls.Interfaces;
 
 /// <summary>
-/// 可执行接口
+/// 可单选项目接口
 /// </summary>
-public interface ICanExecute
+public interface IRadioItemVM : ISelectableItemVM
 {
     /// <summary>
-    /// 可执行
+    /// 分组名称
     /// </summary>
-    public bool CanExecute { get; set; }
+    public string? GroupName { get; set; }
 }

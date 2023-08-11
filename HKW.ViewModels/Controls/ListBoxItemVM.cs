@@ -7,4 +7,4 @@ namespace HKW.HKWViewModels.Controls;
 /// 列表项视图模型
 /// </summary>
 [DebuggerDisplay("{Name}, Content = {Content}, IsSelected = {IsSelected}")]
-public partial class ListBoxItemVM : SelectableControlVM { }
+public partial class ListBoxItemVM : SelectableItemVM { }

@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 namespace HKW.HKWViewModels.Controls.Interfaces;
 
 /// <summary>
-/// 按钮视图模型接口
+/// 可选中的控件模型接口
 /// </summary>
-public interface IButtonVM : IContentControlVM, ICanExecuteVM { }
+public interface ISelectableItemVM
+{
+    /// <summary>
+    /// 已选中
+    /// </summary>
+    public bool IsSelected { get; set; }
+}

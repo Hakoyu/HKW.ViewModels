@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKW.HKWViewModels;
 using HKW.HKWViewModels.Controls;
 using HKW.HKWViewModels.Controls.Attachment;
 
@@ -14,28 +15,10 @@ namespace HKW.VIewModels.TestInWPF;
 public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty]
-    private ControlVM<Test> _control = new() { Attachment = new() { Name = "114" } };
-
-    //[ObservableProperty]
-    //private ContextMenuVM _contextMenu =
-    //    new(() =>
-    //    {
-    //        ObservableCollection<MenuItemVM> items = new();
-    //        MenuItemVM menuItem = new();
-    //        items.Add(menuItem);
-    //        return items;
-    //    });
-
-    ButtonVM buttonVM = new() { };
-
-    [RelayCommand]
-    private void Button()
-    {
-        Control.Attachment!.Name = "514";
-    }
+    private ObservableI18n<Text> _i18n = ObservableI18n<Text>.Create(new());
 }
 
-public class Test
+public class Text
 {
-    public string Name { get; set; }
+    public static string Name { get; } = "Name";
 }

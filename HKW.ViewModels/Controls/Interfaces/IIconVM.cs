@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace HKW.HKWViewModels.Controls.Interfaces;
 
 /// <summary>
-/// 可选中的控件模型接口
+/// 图标接口
 /// </summary>
-public interface ISelectableControlVM : IContentControlVM
+public interface IIconVM
 {
     /// <summary>
-    /// 已选中
+    /// 图标
     /// </summary>
-    public bool IsSelected { get; set; }
+    public object? Icon { get; set; }
 }

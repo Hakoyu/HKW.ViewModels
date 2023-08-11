@@ -12,6 +12,7 @@ namespace HKW.HKWViewModels.Controls;
 /// <typeparam name="T">项目类型</typeparam>
 [DebuggerDisplay("{Name}, SelectedIndex = {SelectedIndex}")]
 public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>
+    where T : ISelectableItemVM
 {
     /// <inheritdoc cref="ISelectorVM{T}.SelectedIndex"/>
     [ObservableProperty]

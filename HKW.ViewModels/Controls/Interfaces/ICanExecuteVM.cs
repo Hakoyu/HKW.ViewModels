@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace HKW.HKWViewModels.Controls.Interfaces;
 
 /// <summary>
-/// 图标接口
+/// 可执行接口
 /// </summary>
-public interface IIcon
+public interface ICanExecuteVM
 {
     /// <summary>
-    /// 图标
+    /// 可执行
     /// </summary>
-    public object? Icon { get; set; }
+    public bool CanExecute { get; set; }
 }
