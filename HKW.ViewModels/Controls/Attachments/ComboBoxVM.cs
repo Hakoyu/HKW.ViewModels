@@ -3,7 +3,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWViewModels.Controls;
 
-namespace HKW.HKWViewModels.Controls.Attachment;
+namespace HKW.HKWViewModels.Controls.Attachments;
 
 /// <summary>
 /// 组合框视图模型

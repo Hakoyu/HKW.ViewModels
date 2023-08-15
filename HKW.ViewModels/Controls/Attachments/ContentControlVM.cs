@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls.Attachment;
+namespace HKW.HKWViewModels.Controls.Attachments;
 
 /// <summary>
 /// 可包含任意类型内容的控件模型

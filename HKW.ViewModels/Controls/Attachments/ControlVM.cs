@@ -3,7 +3,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils.Collections;
 
-namespace HKW.HKWViewModels.Controls.Attachment;
+namespace HKW.HKWViewModels.Controls.Attachments;
 
 /// <summary>
 /// 基础控件模型

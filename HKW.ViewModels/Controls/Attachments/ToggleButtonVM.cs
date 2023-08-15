@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HKW.HKWViewModels.Controls.Attachment;
+namespace HKW.HKWViewModels.Controls.Attachments;
 
 /// <summary>
 /// 可切换按钮

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.HKWViewModels.Controls.Attachment;
+namespace HKW.HKWViewModels.Controls.Attachments;
 
 /// <summary>
 /// 组合框项视图模型

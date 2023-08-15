@@ -1,22 +1,29 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using HKW.HKWViewModels.Controls.Attachments;
 using HKW.HKWViewModels.Controls.Interfaces;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace HKW.HKWViewModels.Controls;
 
 /// <summary>
-/// 选择器视图模型接口
+/// 多选选择器视图模型
 /// </summary>
 /// <typeparam name="T">项目类型</typeparam>
-[DebuggerDisplay("{Name}, SelectedIndex = {SelectedIndex}")]
-public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>, ISelectorVM
-    where T : ISelectableItemVM
+[DebuggerDisplay("{Name}, SelectedCount = {SelectedItems.Count}")]
+public partial class MultiSelectorVM<T> : ItemCollectionVM<T>, IMultiSelectorVM<T>, IMultiSelectorVM
+    where T : IMultiSelectableItemVM
 {
-    /// <inheritdoc cref="ISelectorVM{T}.SelectedIndex"/>
+    public ObservableCollection<T> SelectedItems { get; } = new();
+
+    IList? IMultiSelectorVM.SelectedItems => SelectedItems;
+
+    /// <inheritdoc cref="IMultiSelectorVM{T}.SelectedIndex"/>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedItem))]
     private int _selectedIndex = -1;
@@ -32,22 +39,22 @@ public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>, ISelec
         SelectionChangedCommand.Execute(SelectedItem);
     }
 
-    /// <inheritdoc cref="ISelectorVM{T}.SelectedItem"/>
+    /// <inheritdoc cref="IMultiSelectorVM{T}.SelectedItem"/>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedIndex))]
     private T? _selectedItem;
 
-    /// <inheritdoc cref="ISelectorVM{T}.SelectedItem"/>
+    /// <inheritdoc cref="IMultiSelectorVM{T}.SelectedItem"/>
     object? ISelectorVM.SelectedItem
     {
         get => SelectedItem;
         set => SelectedItem = (T?)value;
     }
 
-    /// <inheritdoc cref="ISelectorVM{T}.SelectedItem"/>
+    /// <inheritdoc cref="IMultiSelectorVM{T}.SelectedItem"/>
     IRelayCommand ISelectorVM.SelectionChangedCommand => SelectionChangedCommand;
 
-    /// <inheritdoc cref="ISelectorVM{T}.SelectedItem"/>
+    /// <inheritdoc cref="IMultiSelectorVM{T}.SelectedItem"/>
     IList IItemCollectionVM.ItemsSource
     {
         get => ItemsSource;
@@ -62,7 +69,7 @@ public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>, ISelec
         SelectedIndex = ItemsSource.IndexOf(value);
     }
 
-    public SelectorVM(IEnumerable<T>? itemsSource = null)
+    public MultiSelectorVM(IEnumerable<T>? itemsSource = null)
         : base(itemsSource)
     {
         foreach (var item in ItemsSource)
@@ -84,11 +91,11 @@ public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>, ISelec
             };
     }
 
-    /// <inheritdoc cref="ISelectorVM{T}.SelectionChangedCommand"/>
+    /// <inheritdoc cref="IMultiSelectorVM{T}.SelectionChangedCommand"/>
     /// <param name="item">选中项</param>
     [RelayCommand]
     private void SelectionChanged(T item) => SelectionChangedEvent?.Invoke(item);
 
     /// <inheritdoc/>
-    public event ISelectorVM<T>.SelectionChangedHandler? SelectionChangedEvent;
+    public event IMultiSelectorVM<T>.SelectionChangedHandler? SelectionChangedEvent;
 }

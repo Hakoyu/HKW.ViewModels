@@ -8,7 +8,7 @@ namespace HKW.HKWViewModels.Controls;
 /// 列表模型
 /// </summary>
 [DebuggerDisplay("{Name}, Count = {ItemsSource.Count}")]
-public partial class ListBoxVM : SelectorVM<ListBoxItemVM>
+public partial class ListBoxVM : MultiSelectorVM<ListBoxItemVM>
 {
     /// <inheritdoc/>
     /// <param name="itemsSource">项目</param>

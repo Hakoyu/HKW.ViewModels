@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace HKW.HKWViewModels.Controls.Interfaces;
 
 /// <summary>
-/// 可选中的控件模型接口
+/// 可被多选的可选中的控件模型接口
 /// </summary>
-public interface ISelectableItemVM
+public interface IMultiSelectableItemVM
 {
     /// <summary>
     /// 已选中
@@ -19,5 +19,5 @@ public interface ISelectableItemVM
     /// <summary>
     /// 父级
     /// </summary>
-    public ISelectorVM? Parent { get; set; }
+    public IMultiSelectorVM? Parent { get; set; }
 }

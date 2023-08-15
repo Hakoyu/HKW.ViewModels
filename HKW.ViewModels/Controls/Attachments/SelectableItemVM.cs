@@ -6,19 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls;
+namespace HKW.HKWViewModels.Controls.Attachments;
 
 /// <summary>
 /// 可选中的控件模型
 /// </summary>
-[DebuggerDisplay("{Name}, Content = {Content}")]
-public partial class SelectableItemVM : ContentControlVM, ISelectableItemVM
+[DebuggerDisplay("{Name}, Content = {Content}, Attachment = {Attachment}")]
+public partial class SelectableItemVM<T> : ContentControlVM<T>, ISelectableItemVM
 {
     /// <inheritdoc cref="ISelectableItemVM.IsSelected"/>
     [ObservableProperty]
     private bool _isSelected = false;
 
-    partial void OnIsSelectedChanging(bool value)
+    partial void OnIsSelectedChanged(bool value)
     {
         if (Parent is null)
             return;
@@ -30,8 +30,7 @@ public partial class SelectableItemVM : ContentControlVM, ISelectableItemVM
         }
         else
         {
-            if (Parent.SelectedItem is not null)
-                Parent.SelectedItem = null;
+            Parent.SelectedItem = null;
         }
     }
 

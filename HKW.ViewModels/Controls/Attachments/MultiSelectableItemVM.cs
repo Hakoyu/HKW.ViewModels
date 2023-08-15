@@ -1,18 +1,19 @@
-﻿using System;
+﻿using HKW.HKWViewModels.Controls.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HKW.HKWViewModels.Controls.Interfaces;
 
-namespace HKW.HKWViewModels.Controls;
+namespace HKW.HKWViewModels.Controls.Attachments;
 
 /// <summary>
-/// 可选中的控件模型
+/// 可被多选的可选中的控件模型
 /// </summary>
-[DebuggerDisplay("{Name}, Content = {Content}")]
-public partial class SelectableItemVM : ContentControlVM, ISelectableItemVM
+/// <typeparam name="T">附加类型</typeparam>
+[DebuggerDisplay("{Name}, Content = {Content}, Attachment = {Attachment}")]
+public partial class MultiSelectableItemVM<T> : ContentControlVM<T>, IMultiSelectableItemVM
 {
     /// <inheritdoc cref="ISelectableItemVM.IsSelected"/>
     [ObservableProperty]
@@ -24,21 +25,19 @@ public partial class SelectableItemVM : ContentControlVM, ISelectableItemVM
             return;
         if (value is true)
         {
-            foreach (ISelectableItemVM item in Parent.ItemsSource)
-                item.IsSelected = false;
             Parent.SelectedItem = this;
         }
         else
         {
-            if (Parent.SelectedItem is not null)
+            if (Parent.SelectedItem == this)
                 Parent.SelectedItem = null;
         }
     }
 
-    private ISelectorVM? _parent;
+    private IMultiSelectorVM? _parent;
 
-    /// <inheritdoc cref="ISelectableItemVM.Parent"/>
-    public ISelectorVM? Parent
+    /// <inheritdoc cref="IMultiSelectorVM.Parent"/>
+    public IMultiSelectorVM? Parent
     {
         get => _parent;
         set => _parent = _parent is not null ? throw new Exception("Cannot change parent") : value;

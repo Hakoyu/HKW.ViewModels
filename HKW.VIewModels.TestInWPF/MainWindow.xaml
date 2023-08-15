@@ -52,20 +52,11 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid Background="Beige">
-        <Grid.ContextMenu>
-            <ContextMenu ItemContainerStyle="{StaticResource MenuItemViewStyle}" ItemsSource="{Binding ContextMenu.ItemsSource}">
-                <i:Interaction.Triggers>
-                    <!--  使用Loaded时,如果有多个未载入的菜单,使用右键挨个点击只会载入第一个,故使用Opened  -->
-                    <i:EventTrigger EventName="Opened">
-                        <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ContextMenu>
-        </Grid.ContextMenu>
+    <StackPanel Background="Beige">
         <Button
-            VerticalAlignment="Top"
-            Command="{Binding ButtonCommand}"
-            Content="{Binding I18n.I18nRes.Name}" />
-    </Grid>
+            Height="50"
+            Command="{Binding ClickCommand}"
+            Content="114514" />
+        <DataGrid ItemsSource="{Binding Tests}" SelectedItem="{Binding SelectedItems}" />
+    </StackPanel>
 </Window>

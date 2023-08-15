@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,4 +18,15 @@ public interface IItemCollectionVM<T> : IControlVM
     /// 项目资源
     /// </summary>
     public ObservableCollection<T> ItemsSource { get; set; }
+}
+
+/// <summary>
+/// 项目集合模型接口
+/// </summary>
+public interface IItemCollectionVM : IControlVM
+{
+    /// <summary>
+    /// 项目资源
+    /// </summary>
+    public IList ItemsSource { get; set; }
 }
