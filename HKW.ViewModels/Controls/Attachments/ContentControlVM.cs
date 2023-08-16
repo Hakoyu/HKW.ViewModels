@@ -7,15 +7,11 @@ namespace HKW.HKWViewModels.Controls.Attachments;
 /// <summary>
 /// 可包含任意类型内容的控件模型
 /// </summary>
-/// <typeparam name="T">附加值类型</typeparam>
+/// <typeparam name="TAttachment">附加值类型</typeparam>
 [DebuggerDisplay("{Name}, Content = {Content}, Attachment = {Attachment}")]
-public partial class ContentControlVM<T> : ControlVM<T>, IContentControlVM
+public partial class ContentControlVM<TAttachment> : ControlVM, IAttachment<TAttachment>
 {
-    /// <inheritdoc cref="IContentControlVM.Icon"/>
+    /// <inheritdoc cref="IAttachment{T}.Attachment"/>
     [ObservableProperty]
-    private object? _icon;
-
-    /// <inheritdoc cref="IContentControlVM.Content"/>
-    [ObservableProperty]
-    private object? _content;
+    private TAttachment? _attachment;
 }

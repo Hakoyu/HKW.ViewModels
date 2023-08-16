@@ -9,34 +9,15 @@ namespace HKW.HKWViewModels.Controls.Attachments;
 /// <summary>
 /// 菜单项模型
 /// </summary>
-/// <typeparam name="T">附加值类型</typeparam>
+/// <typeparam name="TAttachment">附加值类型</typeparam>
 [DebuggerDisplay(
     "{Name}, Header = {Header}, Count = {ItemsSource.Count}, Attachment = {Attachment}"
 )]
-public partial class MenuItemVM<T>
-    : HeaderedItemsControlVM<MenuItemVM<T>, T>,
-        IHeaderedItemsControlVM<MenuItemVM<T>>,
-        IButtonCommandVM,
-        IIconVM
+public partial class MenuItemVM<TAttachment>
+    : HeaderedItemsControlVM<MenuItemVM<TAttachment>>,
+        IAttachment<TAttachment>
 {
-    /// <inheritdoc cref="IIconVM.Icon"/>
+    /// <inheritdoc cref="IAttachment{T}.Attachment"/>
     [ObservableProperty]
-    private object? _icon;
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(ClickCommand))]
-    private bool _canExecute = true;
-
-    [RelayCommand(CanExecute = nameof(CanExecute))]
-    private async Task ClickAsync(object parameter)
-    {
-        CommandEvent?.Invoke(parameter);
-        if (CommandEventAsync is null)
-            return;
-        await CommandEventAsync.Invoke(parameter);
-    }
-
-    public event IButtonCommandVM.CommandHandler? CommandEvent;
-
-    public event IButtonCommandVM.CommandHandlerAsync? CommandEventAsync;
+    private TAttachment? _attachment;
 }

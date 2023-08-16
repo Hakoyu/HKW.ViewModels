@@ -37,6 +37,14 @@ public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>, ISelec
     [NotifyPropertyChangedFor(nameof(SelectedIndex))]
     private T? _selectedItem;
 
+    partial void OnSelectedItemChanged(T? value)
+    {
+        if (value is null)
+            return;
+        value.IsSelected = true;
+        SelectedIndex = ItemsSource.IndexOf(value);
+    }
+
     /// <inheritdoc cref="ISelectorVM{T}.SelectedItem"/>
     object? ISelectorVM.SelectedItem
     {
@@ -52,14 +60,6 @@ public partial class SelectorVM<T> : ItemCollectionVM<T>, ISelectorVM<T>, ISelec
     {
         get => ItemsSource;
         set => ItemsSource = new ObservableCollection<T>(value.Cast<T>());
-    }
-
-    partial void OnSelectedItemChanged(T? value)
-    {
-        if (value is null)
-            return;
-        value.IsSelected = true;
-        SelectedIndex = ItemsSource.IndexOf(value);
     }
 
     public SelectorVM(IEnumerable<T>? itemsSource = null)

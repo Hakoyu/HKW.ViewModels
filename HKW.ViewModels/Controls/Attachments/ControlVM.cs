@@ -8,11 +8,11 @@ namespace HKW.HKWViewModels.Controls.Attachments;
 /// <summary>
 /// 基础控件模型
 /// </summary>
-/// <typeparam name="T">附加值类型</typeparam>
+/// <typeparam name="TAttachment">附加值类型</typeparam>
 [DebuggerDisplay("{Name}, Tag = {Tag}, Attachment = {Attachment}")]
-public partial class ControlVM<T> : ControlVM, IAttachment<T>
+public partial class ControlVM<TAttachment> : ControlVM, IAttachment<TAttachment>
 {
     /// <inheritdoc cref="IAttachment{T}.Attachment"/>
     [ObservableProperty]
-    private T? _attachment;
+    private TAttachment? _attachment;
 }

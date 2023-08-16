@@ -7,6 +7,11 @@ namespace HKW.HKWViewModels.Controls.Attachments;
 /// <summary>
 /// 列表项视图模型
 /// </summary>
-/// <typeparam name="T">附加值类型</typeparam>
+/// <typeparam name="TAttachment">附加值类型</typeparam>
 [DebuggerDisplay("{Name}, Content = {Content}, Attachment = {Attachment}")]
-public partial class ListBoxItemVM<T> : MultiSelectableItemVM<T>, IMultiSelectableItemVM { }
+public partial class ListBoxItemVM<TAttachment> : ListBoxItemVM, IAttachment<TAttachment>
+{
+    /// <inheritdoc cref="IAttachment{T}.Attachment"/>
+    [ObservableProperty]
+    private TAttachment? _attachment;
+}

@@ -30,24 +30,29 @@ public partial class MainWindowViewModel : ObservableObject
         };
 
     [ObservableProperty]
-    private ListBoxVM _listBox = new(new Func<ObservableCollection<ListBoxItemVM>>(() =>
+    private ComboBoxVM<Test> _comboBox = new(new Func<
+                ObservableCollection<ComboBoxItemVM<Test>>
+            >(() =>
             {
-                var items = new ObservableCollection<ListBoxItemVM>();
-                var item = new ListBoxItemVM() { Content = 1 };
+                var items = new ObservableCollection<ComboBoxItemVM<Test>>();
+                var item = new ComboBoxItemVM<Test>() { Content = 1 };
                 items.Add(item);
-                item = new ListBoxItemVM() { Content = 2 };
+                item = new ComboBoxItemVM<Test>() { Content = 2 };
                 items.Add(item);
-                item = new ListBoxItemVM() { Content = 3 };
+                item = new ComboBoxItemVM<Test>() { Content = 3 };
                 items.Add(item);
-                item = new ListBoxItemVM() { Content = 4 };
+                item = new ComboBoxItemVM<Test>() { Content = 4 };
                 items.Add(item);
-                item = new ListBoxItemVM() { Content = 5 };
+                item = new ComboBoxItemVM<Test>() { Content = 5 };
                 items.Add(item);
                 return items;
             })());
 
     [RelayCommand]
-    private void Click() { }
+    private void Click()
+    {
+        ComboBox.SelectedIndex = 0;
+    }
 }
 
 public partial class Test : ObservableObject

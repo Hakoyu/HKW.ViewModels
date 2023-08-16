@@ -9,24 +9,11 @@ namespace HKW.HKWViewModels.Controls.Attachments;
 /// <summary>
 /// 按钮视图模型
 /// </summary>
-/// <typeparam name="T">附加值类型</typeparam>
+/// <typeparam name="TAttachment">附加值类型</typeparam>
 [DebuggerDisplay("{Name}, Content = {Content}, Attachment = {Attachment}")]
-public partial class ButtonVM<T> : ContentControlVM<T>, IButtonVM, IButtonCommandVM
+public partial class ButtonVM<TAttachment> : ButtonVM, IAttachment<TAttachment>
 {
-    /// <inheritdoc cref="IButtonVM.CanExecute"/>
+    /// <inheritdoc cref="IAttachment{T}.Attachment"/>
     [ObservableProperty]
-    private bool _canExecute = true;
-
-    [RelayCommand(CanExecute = nameof(CanExecute))]
-    private async Task ClickAsync(object parameter)
-    {
-        CommandEvent?.Invoke(parameter);
-        if (CommandEventAsync is null)
-            return;
-        await CommandEventAsync.Invoke(parameter);
-    }
-
-    public event IButtonCommandVM.CommandHandler? CommandEvent;
-
-    public event IButtonCommandVM.CommandHandlerAsync? CommandEventAsync;
+    private TAttachment? _attachment;
 }

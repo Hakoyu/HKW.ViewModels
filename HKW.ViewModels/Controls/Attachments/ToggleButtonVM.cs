@@ -12,11 +12,9 @@ namespace HKW.HKWViewModels.Controls.Attachments;
 /// </summary>
 /// <typeparam name="T">附加值类型</typeparam>
 [DebuggerDisplay("{Name}, Content = {Content}, IsChecked = {IsChecked}, Attachment = {Attachment}")]
-public partial class ToggleButtonVM<T> : ButtonVM<T>
+public partial class ToggleButtonVM<T> : ToggleButtonVM, IAttachment<T>
 {
-    /// <summary>
-    /// 已选中
-    /// </summary>
+    /// <inheritdoc cref="IAttachment{T}.Attachment"/>
     [ObservableProperty]
-    private bool _isChecked;
+    private T? _attachment;
 }
