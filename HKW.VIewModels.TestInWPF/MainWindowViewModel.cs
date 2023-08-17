@@ -11,7 +11,7 @@ using HKW.HKWViewModels;
 using HKW.HKWViewModels.Controls;
 using HKW.HKWViewModels.Controls.Attachments;
 
-namespace HKW.VIewModels.TestInWPF;
+namespace HKW.VIewModels.TestOnWPF;
 
 public partial class MainWindowViewModel : ObservableObject
 {
@@ -48,10 +48,18 @@ public partial class MainWindowViewModel : ObservableObject
                 return items;
             })());
 
+    [ObservableProperty]
+    private bool _isCheck = false;
+
+    partial void OnIsCheckChanged(bool value)
+    {
+        var i = value;
+    }
+
     [RelayCommand]
     private void Click()
     {
-        ComboBox.SelectedIndex = 0;
+        IsCheck = false;
     }
 }
 

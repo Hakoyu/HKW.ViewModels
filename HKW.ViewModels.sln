@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HKW.ViewModels", "HKW.ViewM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HKW.ViewModels.Tests", "HKW.ViewModels.Tests\HKW.ViewModels.Tests.csproj", "{FBFA0BB3-44C6-44A2-B520-7449601900AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HKW.VIewModels.TestInWPF", "HKW.VIewModels.TestInWPF\HKW.VIewModels.TestInWPF.csproj", "{F0611D51-F9A6-45B3-A896-C28CA2530351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HKW.VIewModels.TestOnWPF", "HKW.VIewModels.TestInWPF\HKW.VIewModels.TestOnWPF.csproj", "{F0611D51-F9A6-45B3-A896-C28CA2530351}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

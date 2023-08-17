@@ -1,7 +1,7 @@
-﻿<Application x:Class="HKW.VIewModels.TestInWPF.App"
+﻿<Application x:Class="HKW.VIewModels.TestOnWPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:HKW.VIewModels.TestInWPF"
+             xmlns:local="clr-namespace:HKW.VIewModels.TestOnWPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
