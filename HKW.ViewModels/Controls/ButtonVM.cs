@@ -11,7 +11,7 @@ namespace HKW.HKWViewModels.Controls;
 [DebuggerDisplay("{Name}, Content = {Content}")]
 public partial class ButtonVM : ContentControlVM, IButtonVM, IButtonCommandVM
 {
-    /// <inheritdoc cref="IButtonVM.CanExecute"/>
+    /// <inheritdoc cref="ICanExecuteVM.CanExecute"/>
     [ObservableProperty]
     private bool _canExecute = true;
 

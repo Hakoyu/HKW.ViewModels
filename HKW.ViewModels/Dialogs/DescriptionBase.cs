@@ -12,22 +12,14 @@ public class DescriptionBase
     /// 过滤器
     /// <para>
     /// 文件选择类型
-    /// <para>
-    /// 描述|*.*
+    /// <para>单个文件: <code>描述|*.*</code></para>
+    /// <para>多个文件: <code>描述|*.*;*.*</code></para>
     /// </para>
-    /// <para>
-    /// 描述|*.*(;*.*(适用于多种文件类型))
-    /// </para>
-    /// </para>
-    /// <para>
-    /// 示例:
-    /// <code>
-    /// <![CDATA[
+    /// <para>示例:
+    /// <code><![CDATA[
     /// Exe File|*.exe
-    ///
-    /// Exe File,Txt File|*.exe;*.txt
-    /// ]]>
-    /// </code>
+    /// Exe File, Txt File|*.exe;*.txt
+    /// ]]></code>
     /// </para>
     /// </summary>
     public string Filter { get; set; } = string.Empty;
