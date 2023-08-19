@@ -42,25 +42,7 @@ public class ObservableCommand : ICommand
 
     /// <inheritdoc/>
     public ObservableCommand()
-        : this(null!, null!) { }
-
-    /// <inheritdoc/>
-    /// <param name="executeAction">执行的方法</param>
-    public ObservableCommand(Action executeAction)
-        : this(executeAction, null!) { }
-
-    /// <inheritdoc/>
-    /// <param name="canExecuteAction">获取能否执行的方法</param>
-    public ObservableCommand(Func<bool> canExecuteAction)
-        : this(null!, canExecuteAction) { }
-
-    /// <inheritdoc/>
-    /// <param name="executeAction">执行的方法</param>
-    /// <param name="canExecuteAction">获取能否执行的方法</param>
-    public ObservableCommand(Action executeAction, Func<bool> canExecuteAction)
     {
-        ExecuteAction = executeAction;
-        CanExecuteAction = canExecuteAction;
         CanExecuteProperty.PropertyChanged += InvokeCanExecuteChanged;
         r_waiting.PropertyChanged += InvokeCanExecuteChanged;
     }

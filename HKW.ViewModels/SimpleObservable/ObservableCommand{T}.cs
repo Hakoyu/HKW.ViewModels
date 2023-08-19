@@ -31,21 +31,7 @@ public class ObservableCommand<T> : ICommand
 
     /// <inheritdoc cref="ObservableCommand.ObservableCommand()"/>
     public ObservableCommand()
-        : this(null!, null!) { }
-
-    /// <inheritdoc cref="ObservableCommand.ObservableCommand(Action)"/>
-    public ObservableCommand(Action<T?> executeAction)
-        : this(executeAction, null!) { }
-
-    /// <inheritdoc cref="ObservableCommand.ObservableCommand(Func{bool})"/>
-    public ObservableCommand(Func<T?, bool> canExecuteAction)
-        : this(null!, canExecuteAction) { }
-
-    /// <inheritdoc cref="ObservableCommand.ObservableCommand(Action, Func{bool})"/>
-    public ObservableCommand(Action<T?> executeAction, Func<T?, bool> canExecuteAction)
     {
-        ExecuteAction = executeAction;
-        CanExecuteAction = canExecuteAction;
         CanExecuteProperty.PropertyChanged += InvokeCanExecuteChanged;
         r_waiting.PropertyChanged += InvokeCanExecuteChanged;
     }

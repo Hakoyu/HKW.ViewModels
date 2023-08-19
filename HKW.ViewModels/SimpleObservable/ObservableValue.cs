@@ -38,33 +38,8 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// <inheritdoc/>
     /// <param name="value">值</param>
     public ObservableValue(T value)
-        : this(value, null!, null!) { }
-
-    /// <inheritdoc/>
-    /// <param name="value">值</param>
-    /// <param name="propertyChanging">属性改变时事件</param>
-    public ObservableValue(T value, PropertyChangingEventHandler propertyChanging)
-        : this(value, propertyChanging, null!) { }
-
-    /// <inheritdoc/>
-    /// <param name="value">值</param>
-    /// <param name="propertyChanged">属性改变后事件</param>
-    public ObservableValue(T value, PropertyChangedEventHandler propertyChanged)
-        : this(value, null!, propertyChanged) { }
-
-    /// <inheritdoc/>
-    /// <param name="value">值</param>
-    /// <param name="propertyChanging">属性改变时事件</param>
-    /// <param name="propertyChanged">属性改变后事件</param>
-    public ObservableValue(
-        T value,
-        PropertyChangingEventHandler propertyChanging,
-        PropertyChangedEventHandler propertyChanged
-    )
     {
         _value = value;
-        PropertyChanging += propertyChanging;
-        PropertyChanged += propertyChanged;
     }
 
     /// <summary>
