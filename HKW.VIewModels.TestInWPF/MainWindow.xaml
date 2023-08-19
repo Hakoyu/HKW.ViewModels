@@ -53,6 +53,7 @@
     </Style>
   </Window.Resources>
   <StackPanel Background="Beige">
+    <TextBox Text="{Binding Text.Value, UpdateSourceTrigger=PropertyChanged}" />
     <ToggleButton
       local:ToggleButtonHelper.CanNotUncheckOnClick="True"
       Content="114"

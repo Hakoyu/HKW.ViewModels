@@ -27,8 +27,10 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
             if (_value?.Equals(value) is true)
                 return;
             PropertyChanging?.Invoke(this, new(nameof(Value)));
+            ValueChanging?.Invoke(_value, value);
             _value = value;
             PropertyChanged?.Invoke(this, new(nameof(Value)));
+            ValueChanged?.Invoke(value);
         }
     }
 
@@ -43,7 +45,7 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     }
 
     /// <summary>
-    /// 属性改变时事件
+    /// 属性改变前事件
     /// </summary>
     public event PropertyChangingEventHandler? PropertyChanging;
 
@@ -51,4 +53,27 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// 属性改变后事件
     /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    /// <summary>
+    /// 值改变前事件
+    /// </summary>
+    public event ValueChangingEventHandler? ValueChanging;
+
+    /// <summary>
+    /// 值改变后事件
+    /// </summary>
+    public event ValueChangedEventHandler? ValueChanged;
+
+    /// <summary>
+    /// 值改变后事件方法
+    /// </summary>
+    /// <param name="value">值</param>
+    public delegate void ValueChangedEventHandler(T? value);
+
+    /// <summary>
+    /// 值改变前事件方法
+    /// </summary>
+    /// <param name="oldValue">旧值</param>
+    /// <param name="newValue">新值</param>
+    public delegate void ValueChangingEventHandler(T? oldValue, T? newValue);
 }

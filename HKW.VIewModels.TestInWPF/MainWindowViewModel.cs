@@ -10,56 +10,28 @@ using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels;
 using HKW.HKWViewModels.Controls;
 using HKW.HKWViewModels.Controls.Attachments;
+using HKW.HKWViewModels.SimpleObservable;
 
 namespace HKW.VIewModels.TestOnWPF;
 
 public partial class MainWindowViewModel : ObservableObject
 {
+    public ObservableValue<string> Text { get; } = new("aaa");
+
     [ObservableProperty]
     private ObservableI18n<Text> _i18n = ObservableI18n<Text>.Create(new());
 
-    [ObservableProperty]
-    private ObservableCollection<Test> _tests =
-        new()
-        {
-            new() { Name = "1" },
-            new() { Name = "2" },
-            new() { Name = "3" },
-            new() { Name = "4" },
-            new() { Name = "5" }
-        };
-
-    [ObservableProperty]
-    private ComboBoxVM<Test> _comboBox = new(new Func<
-                ObservableCollection<ComboBoxItemVM<Test>>
-            >(() =>
-            {
-                var items = new ObservableCollection<ComboBoxItemVM<Test>>();
-                var item = new ComboBoxItemVM<Test>() { Content = 1 };
-                items.Add(item);
-                item = new ComboBoxItemVM<Test>() { Content = 2 };
-                items.Add(item);
-                item = new ComboBoxItemVM<Test>() { Content = 3 };
-                items.Add(item);
-                item = new ComboBoxItemVM<Test>() { Content = 4 };
-                items.Add(item);
-                item = new ComboBoxItemVM<Test>() { Content = 5 };
-                items.Add(item);
-                return items;
-            })());
-
-    [ObservableProperty]
-    private bool _isCheck = false;
-
-    partial void OnIsCheckChanged(bool value)
+    public MainWindowViewModel()
     {
-        var i = value;
+        Text.PropertyChanged += Text_PropertyChanged;
     }
 
-    [RelayCommand]
-    private void Click()
+    private void Text_PropertyChanged(
+        object? sender,
+        System.ComponentModel.PropertyChangedEventArgs e
+    )
     {
-        IsCheck = false;
+        throw new NotImplementedException();
     }
 }
 
