@@ -118,9 +118,9 @@ public class ObservableI18n : INotifyPropertyChanged
             CultureInfo.CurrentCulture = value;
             Thread.CurrentThread.CurrentCulture = value;
             Thread.CurrentThread.CurrentUICulture = value;
+            CultureChanged?.Invoke(value);
             foreach (var observableI18nRes in AllObservableI18nRes.Values)
                 observableI18nRes.PropertyChanged?.Invoke(observableI18nRes, new(null));
-            CultureChanged?.Invoke(value);
         }
     }
 
