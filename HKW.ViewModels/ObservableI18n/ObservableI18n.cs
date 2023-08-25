@@ -82,7 +82,7 @@ public class ObservableI18n<TI18nRes> : ObservableI18n
 /// <summary>
 /// 可观测本地化
 /// <para>用例:
-/// <c>ObservableI18n.Language = "zh-CN"</c>
+/// <c>ObservableI18n.Language = CultureInfo.GetCultureInfo("zh-CN")</c>
 /// </para>
 /// </summary>
 public class ObservableI18n : INotifyPropertyChanged

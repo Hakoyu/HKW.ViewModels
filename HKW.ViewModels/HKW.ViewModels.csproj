@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-		<PackageReference Include="HKW.Utils" Version="0.1.4" />
+		<PackageReference Include="HKW.Utils" Version="*" />
 	</ItemGroup>
 
 	<ItemGroup>

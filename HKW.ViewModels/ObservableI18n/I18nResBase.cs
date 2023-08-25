@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HKW.HKWViewModels.ObservableI18n;
+namespace HKW.HKWViewModels;
 
 /// <summary>
 /// I18n资源基础
@@ -33,6 +33,12 @@ public class I18nResBase
     /// </summary>
     public static bool SrictMode { get; set; } = false;
 
+    /// <summary>
+    /// 覆盖模式 <see langword="false"/>
+    /// <para>开启后添加已存在的新值覆盖旧值</para>
+    /// </summary>
+    public static bool EnableOverride { get; set; } = false;
+
     #region I18nData
     /// <summary>
     /// 所有文化数据
@@ -57,7 +63,7 @@ public class I18nResBase
         };
     }
 
-    #region CultureData Operation
+    #region CurrentCultureData Operation
     /// <summary>
     /// 添加文化数据
     /// </summary>
@@ -66,6 +72,12 @@ public class I18nResBase
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
     public static bool AddCultureData(string key, string value)
     {
+        if (EnableOverride)
+        {
+            if (CurrentCultureData.TryAdd(key, value) is false)
+                CurrentCultureData[key] = value;
+            return true;
+        }
         if (SrictMode)
         {
             CurrentCultureData.Add(key, value);
@@ -112,6 +124,15 @@ public class I18nResBase
     }
 
     /// <summary>
+    /// 清空文化数据
+    /// </summary>
+    public static void ClearCultureData()
+    {
+        CurrentCultureData.Clear();
+    }
+    #endregion
+    #region  CultureData Operation
+    /// <summary>
     /// 添加文化数据
     /// </summary>
     /// <param name="cultureName">文化名称</param>
@@ -122,11 +143,21 @@ public class I18nResBase
     {
         if (SrictMode)
         {
+            if (EnableOverride)
+            {
+                if (CultureDatas[cultureName].TryAdd(key, value) is false)
+                    CultureDatas[cultureName][key] = value;
+                return true;
+            }
             CultureDatas[cultureName].Add(key, value);
             return true;
         }
         if (CultureDatas.TryGetValue(cultureName, out var data))
-            return data.TryAdd(key, value);
+        {
+            if (data.TryAdd(key, value) is false && EnableOverride)
+                data[key] = value;
+            return true;
+        }
         return false;
     }
 
@@ -184,6 +215,20 @@ public class I18nResBase
             return data.TryGetValue(key, out value);
         return false;
     }
+
+    /// <summary>
+    /// 清空文化数据
+    /// </summary>
+    /// <param name="cultureName">文化名称</param>
+    public static void ClearCultureData(string cultureName)
+    {
+        if (SrictMode)
+        {
+            CultureDatas[cultureName].Clear();
+        }
+        if (CultureDatas.TryGetValue(cultureName, out var data))
+            data.Clear();
+    }
     #endregion
 
     #region Culture Operation
@@ -233,6 +278,18 @@ public class I18nResBase
     public static bool RemoveCulture(string cultureName)
     {
         return CultureDatas.Remove(cultureName);
+    }
+
+    /// <summary>
+    /// 清空所有文化
+    /// <para>注意:
+    /// 此操作会将 <see cref="CurrentCultureData"/> 设置为 <see langword="null"/>
+    /// </para>
+    /// </summary>
+    public static void ClearCulture()
+    {
+        CultureDatas.Clear();
+        CurrentCultureData = null!;
     }
 
     ///// <summary>
