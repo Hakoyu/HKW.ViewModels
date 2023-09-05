@@ -53,16 +53,9 @@
     </Style>
   </Window.Resources>
   <StackPanel Background="Beige">
-    <TextBox Text="{Binding Text.Value, UpdateSourceTrigger=PropertyChanged}" />
-    <ToggleButton
-      local:ToggleButtonHelper.CanNotUncheckOnClick="True"
-      Content="114"
-      IsChecked="{Binding IsCheck}" />
     <Button
       Height="50"
       Command="{Binding ClickCommand}"
-      Content="114514" />
-    <ListBox ItemsSource="{Binding ComboBox.ItemsSource}" SelectedItem="{Binding ComboBox.SelectedItem}" />
-    <ComboBox ItemsSource="{Binding ComboBox.ItemsSource}" SelectedItem="{Binding ComboBox.SelectedItem}" />
+      Content="{Binding I18n.I18nRes.Name}" />
   </StackPanel>
 </Window>

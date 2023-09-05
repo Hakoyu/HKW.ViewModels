@@ -30,7 +30,14 @@ public partial class MenuItemVM
         CommandEvent?.Invoke(parameter);
         if (CommandEventAsync is null)
             return;
-        await CommandEventAsync.Invoke(parameter);
+        foreach (
+            var command in CommandEventAsync
+                .GetInvocationList()
+                .Cast<IButtonCommandVM.CommandHandlerAsync>()
+        )
+        {
+            await command.Invoke(parameter);
+        }
     }
 
     public event IButtonCommandVM.CommandHandler? CommandEvent;

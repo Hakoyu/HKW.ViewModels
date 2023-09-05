@@ -9,57 +9,60 @@ namespace HKW.HKWViewModels;
 
 /// <summary>
 /// I18n资源基础
-/// 配合 <see cref="ObservableI18n{T}"/> 使用
+/// 配合 <see cref="ObservableI18nCore"/> 使用
 /// <para>示例:
 /// <code><![CDATA[
 /// public partial class MainWindowViewModel : ObservableObject
 /// {
+///     public static ObservableI18nCore I18nCore { get; } = new();
 ///     [ObservableProperty]
-///     public ObservableI18n<TestI18nRes> _i18n = ObservableI18n<TestI18nRes>.Create(new());
+///     public ObservableI18nRes<TestI18nRes> _i18n = I18nCore.Create<TestI18nRes>(new());
 /// }
-/// public class TestI18nRes : I18nResBase
+/// public class TestI18nRes : II18nRes
 /// {
+///     public static I18nRes I18nRes { get; } =
+///          new(MainWindowViewModel.I18nCore);
 ///     public static string Name => GetCultureData(nameof(Name));
 /// }
 /// ]]>
 /// </code>
 /// </para>
 /// </summary>
-public class I18nResBase
+public class I18nRes
 {
     /// <summary>
     /// 严格模式 默认为: <see langword="false"/>
     /// <para>开启后任何失败操作均会触发异常</para>
     /// </summary>
-    public static bool SrictMode { get; set; } = false;
+    public bool SrictMode { get; set; } = false;
 
     /// <summary>
     /// 覆盖模式 <see langword="false"/>
     /// <para>开启后添加已存在的新值覆盖旧值</para>
     /// </summary>
-    public static bool EnableOverride { get; set; } = false;
+    public bool CanOverride { get; set; } = false;
 
     #region I18nData
     /// <summary>
     /// 所有文化数据
     /// <para>(Culture.Name, <see cref="CurrentCultureData"/>)</para>
     /// </summary>
-    protected static Dictionary<string, Dictionary<string, string>> CultureDatas { get; } = new();
+    protected Dictionary<string, Dictionary<string, string>> CultureDatas { get; } = new();
 
     /// <summary>
     /// 当前文化数据
     /// <para>(key, value)</para>
     /// </summary>
-    protected static Dictionary<string, string> CurrentCultureData { get; private set; } = new();
+    protected Dictionary<string, string> CurrentCultureData { get; private set; } = new();
     #endregion
     /// <summary>
     /// 注册文化改变事件
     /// </summary>
-    static I18nResBase()
+    public I18nRes(ObservableI18nCore core)
     {
-        ObservableI18n.CultureChanged += (c) =>
+        core.CultureChanged += (v) =>
         {
-            SetCurrentCulture(c.Name);
+            SetCurrentCulture(v.Name);
         };
     }
 
@@ -70,9 +73,9 @@ public class I18nResBase
     /// <param name="key">键</param>
     /// <param name="value">值</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool AddCultureData(string key, string value)
+    public bool AddCultureData(string key, string value)
     {
-        if (EnableOverride)
+        if (CanOverride)
         {
             if (CurrentCultureData.TryAdd(key, value) is false)
                 CurrentCultureData[key] = value;
@@ -91,7 +94,7 @@ public class I18nResBase
     /// </summary>
     /// <param name="key">键</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool RemoveCultureData(string key)
+    public bool RemoveCultureData(string key)
     {
         return CurrentCultureData.Remove(key);
     }
@@ -101,7 +104,7 @@ public class I18nResBase
     /// </summary>
     /// <param name="key">键</param>
     /// <returns>文化数据</returns>
-    public static string GetCultureData(string key)
+    public string GetCultureData(string key)
     {
         if (SrictMode)
         {
@@ -118,7 +121,7 @@ public class I18nResBase
     /// <param name="key">键</param>
     /// <param name="value">值</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool TryGetCultureData(string key, [NotNullWhen(true)] out string? value)
+    public bool TryGetCultureData(string key, [NotNullWhen(true)] out string? value)
     {
         return CurrentCultureData.TryGetValue(key, out value);
     }
@@ -126,7 +129,7 @@ public class I18nResBase
     /// <summary>
     /// 清空文化数据
     /// </summary>
-    public static void ClearCultureData()
+    public void ClearCultureData()
     {
         CurrentCultureData.Clear();
     }
@@ -139,11 +142,11 @@ public class I18nResBase
     /// <param name="key">键</param>
     /// <param name="value">值</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool AddCultureData(string cultureName, string key, string value)
+    public bool AddCultureData(string cultureName, string key, string value)
     {
         if (SrictMode)
         {
-            if (EnableOverride)
+            if (CanOverride)
             {
                 if (CultureDatas[cultureName].TryAdd(key, value) is false)
                     CultureDatas[cultureName][key] = value;
@@ -154,7 +157,7 @@ public class I18nResBase
         }
         if (CultureDatas.TryGetValue(cultureName, out var data))
         {
-            if (data.TryAdd(key, value) is false && EnableOverride)
+            if (data.TryAdd(key, value) is false && CanOverride)
                 data[key] = value;
             return true;
         }
@@ -167,7 +170,7 @@ public class I18nResBase
     /// <param name="cultureName">文化名称</param>
     /// <param name="key">键</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool RemoveCultureData(string cultureName, string key)
+    public bool RemoveCultureData(string cultureName, string key)
     {
         if (SrictMode)
         {
@@ -185,7 +188,7 @@ public class I18nResBase
     /// <param name="cultureName">文化名称</param>
     /// <param name="key">键</param>
     /// <returns>文化数据</returns>
-    public static string GetCultureData(string cultureName, string key)
+    public string GetCultureData(string cultureName, string key)
     {
         if (SrictMode)
         {
@@ -204,7 +207,7 @@ public class I18nResBase
     /// <param name="key">键</param>
     /// <param name="value">值</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool TryGetCultureData(
+    public bool TryGetCultureData(
         string cultureName,
         string key,
         [NotNullWhen(true)] out string? value
@@ -220,7 +223,7 @@ public class I18nResBase
     /// 清空文化数据
     /// </summary>
     /// <param name="cultureName">文化名称</param>
-    public static void ClearCultureData(string cultureName)
+    public void ClearCultureData(string cultureName)
     {
         if (SrictMode)
         {
@@ -237,7 +240,7 @@ public class I18nResBase
     /// </summary>
     /// <param name="cultureName">文化名称</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool SetCurrentCulture(string cultureName)
+    public bool SetCurrentCulture(string cultureName)
     {
         if (SrictMode)
         {
@@ -260,7 +263,7 @@ public class I18nResBase
     /// </summary>
     /// <param name="cultureName">文化名称</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool AddCulture(string cultureName)
+    public bool AddCulture(string cultureName)
     {
         if (SrictMode)
         {
@@ -275,7 +278,7 @@ public class I18nResBase
     /// </summary>
     /// <param name="cultureName">文化名称</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool RemoveCulture(string cultureName)
+    public bool RemoveCulture(string cultureName)
     {
         return CultureDatas.Remove(cultureName);
     }
@@ -286,7 +289,7 @@ public class I18nResBase
     /// 此操作会将 <see cref="CurrentCultureData"/> 设置为 <see langword="null"/>
     /// </para>
     /// </summary>
-    public static void ClearCulture()
+    public void ClearCulture()
     {
         CultureDatas.Clear();
         CurrentCultureData = null!;
@@ -298,7 +301,7 @@ public class I18nResBase
     ///// <param name="oldCultureName">旧文化名称</param>
     ///// <param name="newCultureName">新文化名称</param>
     ///// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    //public static bool ChangeCulture(string oldCultureName, string newCultureName)
+    //public bool ChangeCulture(string oldCultureName, string newCultureName)
     //{
     //    if (
     //        CultureDatas.ContainsKey(oldCultureName) is false

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,22 +17,20 @@ namespace HKW.VIewModels.TestOnWPF;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    public ObservableValue<string> Text { get; } = new("aaa");
+    public static ObservableI18nCore I18nCore { get; } = new() { };
 
     [ObservableProperty]
-    private ObservableI18n<Text> _i18n = ObservableI18n<Text>.Create(new());
+    private ObservableI18nRes<TestI18nRes> _i18n = I18nCore.Create<TestI18nRes>(new());
 
-    public MainWindowViewModel()
-    {
-        Text.PropertyChanged += Text_PropertyChanged;
-    }
+    public MainWindowViewModel() { }
 
-    private void Text_PropertyChanged(
-        object? sender,
-        System.ComponentModel.PropertyChangedEventArgs e
-    )
+    [RelayCommand]
+    private void Click()
     {
-        throw new NotImplementedException();
+        if (I18nCore.CurrentCulture.Name == CultureName.CN)
+            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.EN);
+        else
+            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.CN);
     }
 }
 
@@ -41,7 +40,23 @@ public partial class Test : ObservableObject
     private string? _name;
 }
 
-public class Text
+public class TestI18nRes
 {
-    public static string Name { get; } = "Name";
+    public static I18nRes I18nRes { get; } =
+        new(MainWindowViewModel.I18nCore) { CanOverride = true };
+    public static string Name => I18nRes.GetCultureData(nameof(Name));
+
+    static TestI18nRes()
+    {
+        I18nRes.AddCulture(CultureName.CN);
+        I18nRes.AddCulture(CultureName.EN);
+        I18nRes.AddCultureData(CultureName.CN, nameof(Name), "姓名");
+        I18nRes.AddCultureData(CultureName.EN, nameof(Name), nameof(Name));
+    }
+}
+
+public static class CultureName
+{
+    public const string CN = "zh-CN";
+    public const string EN = "en-US";
 }

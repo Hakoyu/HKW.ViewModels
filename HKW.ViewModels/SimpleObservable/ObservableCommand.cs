@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,4 +97,6 @@ public class ObservableCommand : ICommand
     /// 能否执行属性被改变事件
     /// </summary>
     public event EventHandler? CanExecuteChanged;
+
+    public delegate void ExecuteHandler();
 }
