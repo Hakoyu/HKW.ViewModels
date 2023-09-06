@@ -55,7 +55,7 @@
   <StackPanel Background="Beige">
     <Button
       Height="50"
-      Command="{Binding ClickCommand}"
-      Content="{Binding I18n.I18nRes.Name}" />
+      Command="{Binding Command1}"
+      Content="{Binding Command1.CanExecuteProperty.Value}" />
   </StackPanel>
 </Window>

@@ -22,15 +22,54 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private ObservableI18nRes<TestI18nRes> _i18n = I18nCore.Create<TestI18nRes>(new());
 
-    public MainWindowViewModel() { }
+    [ObservableProperty]
+    private bool _showCanExecute = true;
 
-    [RelayCommand]
-    private void Click()
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ClickCommand))]
+    private bool _canExecute = true;
+
+    public ObservableCommand Command1 { get; } = new();
+
+    public MainWindowViewModel()
+    {
+        //Command1.ExecuteEvent += Command1_ExecuteEvent;
+        Command1.AsyncExecuteEvent += Command1_AsyncExecuteEvent;
+        ClickCommand.CanExecuteChanged += ClickCommand_CanExecuteChanged;
+    }
+
+    private void ClickCommand_CanExecuteChanged(object? sender, EventArgs e)
+    {
+        ShowCanExecute = CanExecute;
+    }
+
+    private async Task Command1_AsyncExecuteEvent()
+    {
+        await Task.Delay(1000);
+        if (I18nCore.CurrentCulture.Name == CultureName.CN)
+            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.EN);
+        else
+            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.CN);
+        Command1.CanExecuteProperty.Value = false;
+    }
+
+    private void Command1_ExecuteEvent()
     {
         if (I18nCore.CurrentCulture.Name == CultureName.CN)
             I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.EN);
         else
             I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.CN);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecute))]
+    private async Task Click()
+    {
+        await Task.Delay(1000);
+        if (I18nCore.CurrentCulture.Name == CultureName.CN)
+            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.EN);
+        else
+            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.CN);
+        CanExecute = false;
     }
 }
 
