@@ -31,11 +31,26 @@ public partial class MainWindowViewModel : ObservableObject
 
     public ObservableCommand Command1 { get; } = new();
 
+    public ObservableValue<string> Str1 { get; } = new("114514");
+    public ObservableValue<string> Str2 { get; } = new();
+
     public MainWindowViewModel()
     {
+        Command1.AddNotifyReceiver(Str1);
+        Command1.NotifyCanExecuteReceived += Command1_NotifyCanExecuteReceived;
         //Command1.ExecuteEvent += Command1_ExecuteEvent;
-        Command1.AsyncExecuteEvent += Command1_AsyncExecuteEvent;
-        ClickCommand.CanExecuteChanged += ClickCommand_CanExecuteChanged;
+        //Command1.AsyncExecuteEvent += Command1_AsyncExecuteEvent;
+        //ClickCommand.CanExecuteChanged += ClickCommand_CanExecuteChanged;
+    }
+
+    private void Command1_NotifyCanExecuteReceived(ref bool value)
+    {
+        value = Str1.Value == "114514";
+    }
+
+    private void Str2_NotifiedPropertyChange(ref string value)
+    {
+        value = Str1.Value + "1919810";
     }
 
     private void ClickCommand_CanExecuteChanged(object? sender, EventArgs e)

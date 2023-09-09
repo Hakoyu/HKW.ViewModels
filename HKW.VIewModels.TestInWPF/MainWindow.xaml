@@ -53,9 +53,7 @@
     </Style>
   </Window.Resources>
   <StackPanel Background="Beige">
-    <Button
-      Height="50"
-      Command="{Binding Command1}"
-      Content="{Binding Command1.CanExecuteProperty.Value}" />
+    <TextBox Text="{Binding Str1.Value, UpdateSourceTrigger=PropertyChanged}" />
+    <Button Command="{Binding Command1}" Content="Button" />
   </StackPanel>
 </Window>
