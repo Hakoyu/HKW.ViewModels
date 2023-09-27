@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,9 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ClickCommand))]
     private bool _canExecute = true;
+
+    [ObservableProperty]
+    private TestList<int> _testList = new();
 
     public ObservableCommand Command1 { get; } = new();
 
@@ -76,15 +80,16 @@ public partial class MainWindowViewModel : ObservableObject
             I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.CN);
     }
 
-    [RelayCommand(CanExecute = nameof(CanExecute))]
-    private async Task Click()
+    [RelayCommand]
+    private void Click()
     {
-        await Task.Delay(1000);
-        if (I18nCore.CurrentCulture.Name == CultureName.CN)
-            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.EN);
-        else
-            I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.CN);
-        CanExecute = false;
+        TestList.AddRange(Enumerable.Range(0, 10));
+        //await Task.Delay(1000);
+        //if (I18nCore.CurrentCulture.Name == CultureName.CN)
+        //    I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.EN);
+        //else
+        //    I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.CN);
+        //CanExecute = false;
     }
 }
 
@@ -113,4 +118,22 @@ public static class CultureName
 {
     public const string CN = "zh-CN";
     public const string EN = "en-US";
+}
+
+public class TestList<T> : IEnumerable, INotifyCollectionChanged
+{
+    private List<T> _list = new();
+
+    public void AddRange(IEnumerable<T> items)
+    {
+        _list.AddRange(items);
+        CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Add, new List<T>(items)));
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        return ((IEnumerable)_list).GetEnumerator();
+    }
+
+    public event NotifyCollectionChangedEventHandler? CollectionChanged;
 }

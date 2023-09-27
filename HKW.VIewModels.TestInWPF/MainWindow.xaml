@@ -54,6 +54,7 @@
   </Window.Resources>
   <StackPanel Background="Beige">
     <TextBox Text="{Binding Str1.Value, UpdateSourceTrigger=PropertyChanged}" />
-    <Button Command="{Binding Command1}" Content="Button" />
+    <Button Command="{Binding ClickCommand}" Content="Button" />
+    <ListBox ItemsSource="{Binding TestList}" />
   </StackPanel>
 </Window>
