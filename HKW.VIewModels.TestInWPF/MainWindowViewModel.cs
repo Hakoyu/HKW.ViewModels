@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels;
-using HKW.HKWViewModels.Controls;
-using HKW.HKWViewModels.Controls.Attachments;
 using HKW.HKWViewModels.SimpleObservable;
 
 namespace HKW.VIewModels.TestOnWPF;
@@ -29,9 +27,6 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ClickCommand))]
     private bool _canExecute = true;
-
-    [ObservableProperty]
-    private TestList<int> _testList = new();
 
     public ObservableCommand Command1 { get; } = new();
 
@@ -83,7 +78,6 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void Click()
     {
-        TestList.AddRange(Enumerable.Range(0, 10));
         //await Task.Delay(1000);
         //if (I18nCore.CurrentCulture.Name == CultureName.CN)
         //    I18nCore.CurrentCulture = CultureInfo.GetCultureInfo(CultureName.EN);
@@ -99,41 +93,8 @@ public partial class Test : ObservableObject
     private string? _name;
 }
 
-public class TestI18nRes
-{
-    public static I18nRes I18nRes { get; } =
-        new(MainWindowViewModel.I18nCore) { CanOverride = true };
-    public static string Name => I18nRes.GetCultureData(nameof(Name));
-
-    static TestI18nRes()
-    {
-        I18nRes.AddCulture(CultureName.CN);
-        I18nRes.AddCulture(CultureName.EN);
-        I18nRes.AddCultureData(CultureName.CN, nameof(Name), "姓名");
-        I18nRes.AddCultureData(CultureName.EN, nameof(Name), nameof(Name));
-    }
-}
-
 public static class CultureName
 {
     public const string CN = "zh-CN";
     public const string EN = "en-US";
-}
-
-public class TestList<T> : IEnumerable, INotifyCollectionChanged
-{
-    private List<T> _list = new();
-
-    public void AddRange(IEnumerable<T> items)
-    {
-        _list.AddRange(items);
-        CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Add, new List<T>(items)));
-    }
-
-    public IEnumerator GetEnumerator()
-    {
-        return ((IEnumerable)_list).GetEnumerator();
-    }
-
-    public event NotifyCollectionChangedEventHandler? CollectionChanged;
 }

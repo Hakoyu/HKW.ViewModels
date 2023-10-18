@@ -46,7 +46,6 @@ public class ObservableI18nCore
                 Thread.CurrentThread.CurrentCulture = value;
                 Thread.CurrentThread.CurrentUICulture = value;
             }
-            CultureChanged?.Invoke(value);
             RefreshAll();
         }
     }
