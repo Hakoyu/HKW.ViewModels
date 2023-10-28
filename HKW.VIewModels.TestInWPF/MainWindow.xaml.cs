@@ -29,6 +29,10 @@ public partial class MainWindow : Window
         //button.GroupName = "Test";
         InitializeComponent();
         DataContext = new MainWindowViewModel();
+        Button_1.Click += (s, e) =>
+        {
+            e.Handled = true;
+        };
     }
 }
 

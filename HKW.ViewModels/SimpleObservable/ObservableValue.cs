@@ -13,7 +13,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [DebuggerDisplay("{Value}")]
-public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChanged
+public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChanged, IEquatable<T>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private T _value = default!;
@@ -59,15 +59,14 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// </summary>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
+    /// <returns>取消改变</returns>
     private bool NotifyPropertyChanging(T oldValue, T newValue)
     {
         PropertyChanging?.Invoke(this, new(nameof(Value)));
+        var cancel = false;
         // 若全部事件取消改变 则取消改变
-        return ValueChanging
-            ?.GetInvocationList()
-            .Cast<ValueChangingEventHandler>()
-            .All(e => e.Invoke(oldValue, newValue) is true)
-            is true;
+        ValueChanging?.Invoke(oldValue, newValue, ref cancel);
+        return cancel;
     }
 
     /// <summary>
@@ -79,14 +78,6 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     {
         PropertyChanged?.Invoke(this, new(nameof(Value)));
         ValueChanged?.Invoke(oldValue, newValue);
-    }
-    #endregion
-
-    #region Overwrite
-    /// <inheritdoc/>
-    public override string ToString()
-    {
-        return Value?.ToString()!;
     }
     #endregion
 
@@ -133,6 +124,22 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
         NotifyReceived?.Invoke(ref temp);
         Value = temp;
     }
+
+    #endregion
+
+
+    #region Other
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+        return Value?.ToString() ?? string.Empty;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(T? other)
+    {
+        return Value?.Equals(other) is true;
+    }
     #endregion
 
     #region Event
@@ -168,8 +175,8 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// </summary>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
-    /// <returns>取消改变</returns>
-    public delegate bool ValueChangingEventHandler(T oldValue, T newValue);
+    /// <param name="cancel">取消</param>
+    public delegate void ValueChangingEventHandler(T oldValue, T newValue, ref bool cancel);
 
     /// <summary>
     /// 值改变后事件
