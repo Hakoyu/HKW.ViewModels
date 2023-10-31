@@ -13,7 +13,10 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [DebuggerDisplay("{Value}")]
-public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChanged, IEquatable<T>
+public class ObservableValue<T>
+    : INotifyPropertyChanging,
+        INotifyPropertyChanged,
+        IEquatable<ObservableValue<T>>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private T _value = default!;
@@ -136,10 +139,45 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     }
 
     /// <inheritdoc/>
-    public bool Equals(T? other)
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as ObservableValue<T>);
+    }
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return Value?.GetHashCode() ?? 0;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(ObservableValue<T>? other)
     {
         return Value?.Equals(other) is true;
     }
+
+    /// <summary>
+    /// 判断 <see cref="Value"/> 相等
+    /// </summary>
+    /// <param name="value1">左值</param>
+    /// <param name="value2">右值</param>
+    /// <returns>相等为 <see langword="true"/> 否则为 <see langword="false"/></returns>
+    public static bool operator ==(ObservableValue<T> value1, ObservableValue<T> value2)
+    {
+        return value1.Value?.Equals(value2.Value) is true;
+    }
+
+    /// <summary>
+    /// 判断 <see cref="Value"/> 不相等
+    /// </summary>
+    /// <param name="value1">左值</param>
+    /// <param name="value2">右值</param>
+    /// <returns>不相等为 <see langword="true"/> 否则为 <see langword="false"/></returns>
+    public static bool operator !=(ObservableValue<T> value1, ObservableValue<T> value2)
+    {
+        return value1.Value?.Equals(value2.Value) is not true;
+    }
+
     #endregion
 
     #region Event
