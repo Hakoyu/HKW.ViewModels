@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace HKW.HKWViewModels.SimpleObservable;
@@ -126,6 +128,7 @@ public class ObservableValue
     {
         foreach (var item in notices)
         {
+            item.PropertyChanged -= Notify_SenderPropertyChanged;
             item.PropertyChanged += Notify_SenderPropertyChanged;
         }
     }
@@ -170,7 +173,7 @@ public class ObservableValue
 
     private void Notify_SenderPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        NotifySenderPropertyChanged(this, sender as ObservableValue);
+        NotifySenderPropertyChanged(this, sender);
     }
 
     /// <summary>
@@ -178,9 +181,9 @@ public class ObservableValue
     /// </summary>
     /// <param name="source">源</param>
     /// <param name="sender">发送者</param>
-    protected void NotifySenderPropertyChanged(ObservableValue? source, ObservableValue? sender)
+    protected void NotifySenderPropertyChanged(ObservableValue source, object? sender)
     {
-        SenderPropertyChanged?.Invoke(source!, sender!);
+        SenderPropertyChanged?.Invoke(source, sender);
     }
     #endregion
 
@@ -256,9 +259,6 @@ public class ObservableValue
     /// </summary>
     /// <param name="source">源</param>
     /// <param name="sender">发送者</param>
-    public delegate void NotifySenderPropertyChangedHandler(
-        ObservableValue source,
-        ObservableValue sender
-    );
+    public delegate void NotifySenderPropertyChangedHandler(ObservableValue source, object? sender);
     #endregion
 }

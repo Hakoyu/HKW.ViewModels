@@ -19,9 +19,7 @@ public class ObservableValue<T> : ObservableValue, IEquatable<ObservableValue<T>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private T _value = default!;
 
-    /// <summary>
-    /// 当前值
-    /// </summary>
+    /// <inheritdoc cref=" ObservableValue.Value"/>
     public new T Value
     {
         get => _value;
@@ -38,7 +36,7 @@ public class ObservableValue<T> : ObservableValue, IEquatable<ObservableValue<T>
     }
 
     /// <summary>
-    ///
+    /// 分组
     /// </summary>
     public ObservableValueGroup<T>? Group { get; internal set; }
 
@@ -91,26 +89,7 @@ public class ObservableValue<T> : ObservableValue, IEquatable<ObservableValue<T>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly Dictionary<Guid, ObservableValue<T>> _notifySenders = new();
 
-    /// <summary>
-    /// 添加通知发送者
-    /// <para>
-    /// 添加的发送者改变后会执行 <see cref="ObservableValue.SenderPropertyChanged"/>
-    /// </para>
-    /// <para>示例:
-    /// <code><![CDATA[
-    /// ObservableValue<string> value1 = new();
-    /// ObservableValue<string> value2 = new();
-    /// value2.AddNotifySender(value1);
-    /// value2.NotifyReceived += (source, sender) =>
-    /// {
-    ///     source.Value = sender.Value;
-    /// };
-    /// value1.Value = "A";
-    /// // value1.Value == "A", value2.Value == "A"
-    /// ]]>
-    /// </code></para>
-    /// </summary>
-    /// <param name="items">发送者</param>
+    /// <inheritdoc cref=" ObservableValue.AddNotifySender(ObservableValue[])"/>
     public void AddNotifySender(params ObservableValue<T>[] items)
     {
         foreach (var item in items)
@@ -120,10 +99,7 @@ public class ObservableValue<T> : ObservableValue, IEquatable<ObservableValue<T>
         }
     }
 
-    /// <summary>
-    /// 删除通知发送者
-    /// </summary>
-    /// <param name="items">发送者</param>
+    /// <inheritdoc cref=" ObservableValue.RemoveNotifySender(ObservableValue[])"/>
     public void RemoveNotifySender(params ObservableValue<T>[] items)
     {
         foreach (var item in items)
@@ -133,9 +109,7 @@ public class ObservableValue<T> : ObservableValue, IEquatable<ObservableValue<T>
         }
     }
 
-    /// <summary>
-    /// 清空通知发送者
-    /// </summary>
+    /// <inheritdoc cref=" ObservableValue.ClearNotifySender"/>
     public new void ClearNotifySender()
     {
         foreach (var sender in _notifySenders.Values)
@@ -145,7 +119,7 @@ public class ObservableValue<T> : ObservableValue, IEquatable<ObservableValue<T>
 
     private void NotifySenderPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        NotifySenderPropertyChanged(this, sender as ObservableValue);
+        NotifySenderPropertyChanged(this, sender);
     }
     #endregion
 
