@@ -116,6 +116,21 @@ public class ObservableValue
     }
 
     /// <summary>
+    /// 添加通知发送者
+    /// <para>
+    /// 注: 此方法添加的发送者不会被记录到 <see cref="NotifySenders"/> 中
+    /// </para>
+    /// </summary>
+    /// <param name="notices">发送者</param>
+    public void AddNotifySender(params INotifyPropertyChanged[] notices)
+    {
+        foreach (var item in notices)
+        {
+            item.PropertyChanged += Notify_SenderPropertyChanged;
+        }
+    }
+
+    /// <summary>
     /// 删除通知发送者
     /// </summary>
     /// <param name="items">发送者</param>
@@ -125,6 +140,21 @@ public class ObservableValue
         {
             item.PropertyChanged -= Notify_SenderPropertyChanged;
             _notifySenders.Remove(item.Guid);
+        }
+    }
+
+    /// <summary>
+    /// 删除通知发送者
+    /// <para>
+    /// 注: 此方法删除的发送者不会从 <see cref="NotifySenders"/> 中删除
+    /// </para>
+    /// </summary>
+    /// <param name="notices">发送者</param>
+    public void RemoveNotifySender(params INotifyPropertyChanged[] notices)
+    {
+        foreach (var item in notices)
+        {
+            item.PropertyChanged -= Notify_SenderPropertyChanged;
         }
     }
 
