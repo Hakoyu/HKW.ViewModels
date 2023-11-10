@@ -98,7 +98,7 @@ public class ObservableValue
     /// ObservableValue<string> value1 = new();
     /// ObservableValue<string> value2 = new();
     /// value2.AddNotifySender(value1);
-    /// value2.NotifyReceived += (source, sender) =>
+    /// value2.SenderPropertyChanged += (source, sender) =>
     /// {
     ///     source.Value = sender.Value;
     /// };
