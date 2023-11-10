@@ -83,10 +83,10 @@ public class ObservableValue
     /// <summary>
     /// 通知发送者
     /// </summary>
-    public ICollection<ObservableValue> NotifySenders => _notifySenders.Values;
+    public IReadOnlySet<INotifyPropertyChanged> NotifySenders => _notifySenders;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly Dictionary<Guid, ObservableValue> _notifySenders = new();
+    private readonly HashSet<INotifyPropertyChanged> _notifySenders = new();
 
     /// <summary>
     /// 添加通知发送者
@@ -107,22 +107,6 @@ public class ObservableValue
     /// ]]>
     /// </code></para>
     /// </summary>
-    /// <param name="items">发送者</param>
-    public void AddNotifySender(params ObservableValue[] items)
-    {
-        foreach (var item in items)
-        {
-            item.PropertyChanged += Notify_SenderPropertyChanged;
-            _notifySenders.Add(item.Guid, item);
-        }
-    }
-
-    /// <summary>
-    /// 添加通知发送者
-    /// <para>
-    /// 注: 此方法添加的发送者不会被记录到 <see cref="NotifySenders"/> 中
-    /// </para>
-    /// </summary>
     /// <param name="notices">发送者</param>
     public void AddNotifySender(params INotifyPropertyChanged[] notices)
     {
@@ -130,27 +114,12 @@ public class ObservableValue
         {
             item.PropertyChanged -= Notify_SenderPropertyChanged;
             item.PropertyChanged += Notify_SenderPropertyChanged;
+            _notifySenders.Add(item);
         }
     }
 
     /// <summary>
     /// 删除通知发送者
-    /// </summary>
-    /// <param name="items">发送者</param>
-    public void RemoveNotifySender(params ObservableValue[] items)
-    {
-        foreach (var item in items)
-        {
-            item.PropertyChanged -= Notify_SenderPropertyChanged;
-            _notifySenders.Remove(item.Guid);
-        }
-    }
-
-    /// <summary>
-    /// 删除通知发送者
-    /// <para>
-    /// 注: 此方法删除的发送者不会从 <see cref="NotifySenders"/> 中删除
-    /// </para>
     /// </summary>
     /// <param name="notices">发送者</param>
     public void RemoveNotifySender(params INotifyPropertyChanged[] notices)
@@ -158,6 +127,7 @@ public class ObservableValue
         foreach (var item in notices)
         {
             item.PropertyChanged -= Notify_SenderPropertyChanged;
+            _notifySenders.Remove(item);
         }
     }
 
@@ -166,7 +136,7 @@ public class ObservableValue
     /// </summary>
     public void ClearNotifySender()
     {
-        foreach (var sender in _notifySenders.Values)
+        foreach (var sender in _notifySenders)
             sender.PropertyChanged -= Notify_SenderPropertyChanged;
         _notifySenders.Clear();
     }

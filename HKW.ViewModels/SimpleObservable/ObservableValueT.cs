@@ -89,17 +89,18 @@ public class ObservableValue<T> : ObservableValue, IEquatable<ObservableValue<T>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly Dictionary<Guid, ObservableValue<T>> _notifySenders = new();
 
-    /// <inheritdoc cref=" ObservableValue.AddNotifySender(ObservableValue[])"/>
+    /// <inheritdoc cref=" ObservableValue.AddNotifySender(INotifyPropertyChanged[])"/>
     public void AddNotifySender(params ObservableValue<T>[] items)
     {
         foreach (var item in items)
         {
+            item.PropertyChanged -= NotifySenderPropertyChanged;
             item.PropertyChanged += NotifySenderPropertyChanged;
             _notifySenders.Add(item.Guid, item);
         }
     }
 
-    /// <inheritdoc cref=" ObservableValue.RemoveNotifySender(ObservableValue[])"/>
+    /// <inheritdoc cref=" ObservableValue.RemoveNotifySender(INotifyPropertyChanged[])"/>
     public void RemoveNotifySender(params ObservableValue<T>[] items)
     {
         foreach (var item in items)
