@@ -15,12 +15,12 @@ public class ObservableValueTest
     {
         var trigger = false;
         var ov = new ObservableValue<int>(114);
-        ov.ValueChanging += (o, n) =>
+        ov.ValueChanging += (int o, int n, ref bool c) =>
         {
             trigger = true;
             Assert.IsTrue(o == 114);
             Assert.IsTrue(n == 514);
-            return false;
+            c = false;
         };
         ov.Value = 514;
         Assert.IsTrue(trigger);
@@ -32,13 +32,13 @@ public class ObservableValueTest
     {
         var trigger = false;
         var ov = new ObservableValue<int>(114);
-        ov.ValueChanging += (o, n) =>
+        ov.ValueChanging += (int o, int n, ref bool c) =>
         {
             trigger = true;
             Assert.IsTrue(o == 114);
             Assert.IsTrue(n == 514);
             // cancel
-            return true;
+            c = true;
         };
         ov.Value = 514;
         Assert.IsTrue(trigger);

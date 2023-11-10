@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// 可观察值
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[DebuggerDisplay("{Value}")]
+[DebuggerDisplay("\\{ObservableValue, Value = {Value}\\}")]
 public class ObservableValue<T>
     : INotifyPropertyChanging,
         INotifyPropertyChanged,
@@ -40,9 +41,19 @@ public class ObservableValue<T>
     }
 
     /// <summary>
-    /// 含有值
+    /// 包含值
     /// </summary>
     public bool HasValue => Value != null;
+
+    /// <summary>
+    /// 唯一标识符
+    /// </summary>
+    public Guid Guid { get; } = Guid.NewGuid();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public ObservableValueGroup<T>? Group { get; internal set; }
 
     #region Ctor
     /// <inheritdoc/>
@@ -81,55 +92,70 @@ public class ObservableValue<T>
     {
         PropertyChanged?.Invoke(this, new(nameof(Value)));
         ValueChanged?.Invoke(oldValue, newValue);
+        if (oldValue is null || newValue is null)
+            PropertyChanged?.Invoke(this, new(nameof(HasValue)));
     }
     #endregion
 
-    #region NotifyReceiver
+    #region NotifySender
     /// <summary>
-    /// 添加通知属性改变后接收器
+    /// 通知发送者
+    /// </summary>
+    public ICollection<ObservableValue<T>> NotifySenders => _notifySenders.Values;
+
+    private readonly Dictionary<Guid, ObservableValue<T>> _notifySenders = new();
+
+    /// <summary>
+    /// 添加通知发送者
     /// <para>
-    /// 添加的接口触发后会执行 <see cref="NotifyReceived"/>
+    /// 添加的发送者改变后会执行 <see cref="NotifyReceived"/>
     /// </para>
     /// <para>示例:
     /// <code><![CDATA[
     /// ObservableValue<string> value1 = new();
     /// ObservableValue<string> value2 = new();
-    /// value2.AddNotifyReceiver(value1);
-    /// value2.NotifyReceived += (ref string v) =>
+    /// value2.AddNotifySender(value1);
+    /// value2.NotifyReceived += (source, sender) =>
     /// {
-    ///     v = "B"; // trigger this
+    ///     source.Value = sender.Value;
     /// };
-    /// value1.Value = "A"; // execute this
-    /// // result: value1.Value == "A" , value2.Value == "B"
+    /// value1.Value = "A";
+    /// // value1.Value == "A", value2.Value == "A"
     /// ]]>
     /// </code></para>
     /// </summary>
-    /// <param name="notifies">通知属性改变后接口</param>
-    public void AddNotifyReceiver(params INotifyPropertyChanged[] notifies)
+    /// <param name="item">发送者</param>
+    public void AddNotifySender(ObservableValue<T> item)
     {
-        foreach (var notify in notifies)
-            notify.PropertyChanged += Notify_PropertyChanged;
+        item.PropertyChanged += Notify_PropertyChanged;
+        _notifySenders.Add(item.Guid, item);
     }
 
     /// <summary>
-    /// 删除通知属性改变后接收器
+    /// 删除通知发送者
     /// </summary>
-    /// <param name="notifies">通知属性改变后接口</param>
-    public void RemoveNotifyReceiver(params INotifyPropertyChanged[] notifies)
+    /// <param name="item">发送者</param>
+    public void RemoveNotifySender(ObservableValue<T> item)
     {
-        foreach (var notify in notifies)
-            notify.PropertyChanged -= Notify_PropertyChanged;
+        item.PropertyChanged -= Notify_PropertyChanged;
+        _notifySenders.Remove(item.Guid);
+    }
+
+    /// <summary>
+    /// 清空通知发送者
+    /// </summary>
+    public void ClearNotifySender()
+    {
+        foreach (var sender in _notifySenders.Values)
+            sender.PropertyChanged -= Notify_PropertyChanged;
+        _notifySenders.Clear();
     }
 
     private void Notify_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        var temp = Value;
-        NotifyReceived?.Invoke(ref temp);
-        Value = temp;
+        NotifyReceived?.Invoke(this, (ObservableValue<T>)sender!);
     }
-
     #endregion
-
 
     #region Other
     /// <inheritdoc/>
@@ -153,7 +179,7 @@ public class ObservableValue<T>
     /// <inheritdoc/>
     public bool Equals(ObservableValue<T>? other)
     {
-        return Value?.Equals(other) is true;
+        return Guid.Equals(other?.Guid) is true;
     }
 
     /// <summary>
@@ -202,7 +228,7 @@ public class ObservableValue<T>
     public event ValueChangedEventHandler? ValueChanged;
 
     /// <summary>
-    /// 通知接收器事件
+    /// 通知接收事件
     /// </summary>
     public event NotifyReceivedHandler? NotifyReceived;
     #endregion
@@ -226,7 +252,11 @@ public class ObservableValue<T>
     /// <summary>
     /// 通知接收器
     /// </summary>
-    /// <param name="value">引用值</param>
-    public delegate void NotifyReceivedHandler(ref T value);
+    /// <param name="source">源</param>
+    /// <param name="sender">发送者</param>
+    public delegate void NotifyReceivedHandler(
+        ObservableValue<T> source,
+        ObservableValue<T> sender
+    );
     #endregion
 }
