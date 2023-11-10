@@ -103,6 +103,7 @@ public class ObservableValue<T>
     /// </summary>
     public ICollection<ObservableValue<T>> NotifySenders => _notifySenders.Values;
 
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly Dictionary<Guid, ObservableValue<T>> _notifySenders = new();
 
     /// <summary>
@@ -124,21 +125,27 @@ public class ObservableValue<T>
     /// ]]>
     /// </code></para>
     /// </summary>
-    /// <param name="item">发送者</param>
-    public void AddNotifySender(ObservableValue<T> item)
+    /// <param name="items">发送者</param>
+    public void AddNotifySender(params ObservableValue<T>[] items)
     {
-        item.PropertyChanged += Notify_PropertyChanged;
-        _notifySenders.Add(item.Guid, item);
+        foreach (var item in items)
+        {
+            item.PropertyChanged += Notify_PropertyChanged;
+            _notifySenders.Add(item.Guid, item);
+        }
     }
 
     /// <summary>
     /// 删除通知发送者
     /// </summary>
-    /// <param name="item">发送者</param>
-    public void RemoveNotifySender(ObservableValue<T> item)
+    /// <param name="items">发送者</param>
+    public void RemoveNotifySender(params ObservableValue<T>[] items)
     {
-        item.PropertyChanged -= Notify_PropertyChanged;
-        _notifySenders.Remove(item.Guid);
+        foreach (var item in items)
+        {
+            item.PropertyChanged -= Notify_PropertyChanged;
+            _notifySenders.Remove(item.Guid);
+        }
     }
 
     /// <summary>

@@ -42,8 +42,14 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     /// <summary>
     /// 添加项
     /// </summary>
-    /// <param name="item">项</param>
-    public void Add(ObservableValue<T> item)
+    /// <param name="items">项</param>
+    public void Add(params ObservableValue<T>[] items)
+    {
+        foreach (var item in items)
+            AddX(item);
+    }
+
+    private void AddX(ObservableValue<T> item)
     {
         if (item.Group is not null)
             throw new ArgumentException("item.Group must be null", nameof(item));
@@ -67,9 +73,14 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     /// <summary>
     /// 删除项
     /// </summary>
-    /// <param name="item">项</param>
-    /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public bool Remove(ObservableValue<T> item)
+    /// <param name="items">项</param>
+    public void Remove(params ObservableValue<T>[] items)
+    {
+        foreach (var item in items)
+            RemoveX(item);
+    }
+
+    private void RemoveX(ObservableValue<T> item)
     {
         var result = _bindingValues.Remove(item.Guid);
         if (result)
@@ -77,7 +88,6 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
             item.ValueChanged -= Item_ValueChanged;
             item.Group = null;
         }
-        return result;
     }
 
     /// <summary>
