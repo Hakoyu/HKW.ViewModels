@@ -15,12 +15,12 @@ public class ObservableValueTest
     {
         var trigger = false;
         var ov = new ObservableValue<int>(114);
-        ov.ValueChanging += (int o, int n, ref bool c) =>
+        ov.ValueChanging += (s, e) =>
         {
             trigger = true;
-            Assert.IsTrue(o == 114);
-            Assert.IsTrue(n == 514);
-            c = false;
+            Assert.IsTrue(e.OldValue == 114);
+            Assert.IsTrue(e.NewValue == 514);
+            e.Cancel = false;
         };
         ov.Value = 514;
         Assert.IsTrue(trigger);
@@ -32,13 +32,13 @@ public class ObservableValueTest
     {
         var trigger = false;
         var ov = new ObservableValue<int>(114);
-        ov.ValueChanging += (int o, int n, ref bool c) =>
+        ov.ValueChanging += (s, e) =>
         {
             trigger = true;
-            Assert.IsTrue(o == 114);
-            Assert.IsTrue(n == 514);
+            Assert.IsTrue(e.OldValue == 114);
+            Assert.IsTrue(e.NewValue == 514);
             // cancel
-            c = true;
+            e.Cancel = true;
         };
         ov.Value = 514;
         Assert.IsTrue(trigger);
@@ -50,11 +50,11 @@ public class ObservableValueTest
     {
         var trigger = false;
         var ov = new ObservableValue<int>(114);
-        ov.ValueChanged += (o, n) =>
+        ov.ValueChanged += (s, e) =>
         {
             trigger = true;
-            Assert.IsTrue(o == 114);
-            Assert.IsTrue(n == 514);
+            Assert.IsTrue(e.OldValue == 114);
+            Assert.IsTrue(e.NewValue == 514);
         };
         ov.Value = 514;
         Assert.IsTrue(trigger);
