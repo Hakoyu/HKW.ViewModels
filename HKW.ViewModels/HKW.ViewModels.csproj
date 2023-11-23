@@ -11,11 +11,15 @@
 		<Version>0.6.2</Version>
 		<RepositoryType>https://github.com/Hakoyu/HKW.ViewModels</RepositoryType>
 		<IncludeSymbols>False</IncludeSymbols>
+		<Authors>HKW</Authors>
+		<Company>HKW</Company>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="HKW.Utils" Version="*" />
+		<PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" Version="16.205.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -25,6 +29,13 @@
 	<ItemGroup>
 		<Using Include="CommunityToolkit.Mvvm.ComponentModel" />
 		<Using Include="CommunityToolkit.Mvvm.Input" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

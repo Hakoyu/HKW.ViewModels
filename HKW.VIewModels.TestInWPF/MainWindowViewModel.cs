@@ -11,10 +11,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels;
 using HKW.HKWViewModels.SimpleObservable;
+using HKW.HKWViewModels;
 
 namespace HKW.VIewModels.TestOnWPF;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel : ViewModelBase
 {
     public static ObservableI18nCore I18nCore { get; } = new() { };
 
@@ -28,6 +29,9 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ClickCommand))]
     private bool _canExecute = true;
 
+    [ObservableProperty]
+    private int _count = 0;
+
     public ObservableCommand Command1 { get; } = new();
 
     public ObservableValue<string> Str1 { get; } = new("114514");
@@ -35,8 +39,18 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
-        Command1.AddNotifyReceiver(Str1);
-        Command1.NotifyCanExecuteReceived += Command1_NotifyCanExecuteReceived;
+        EnableValueChangeEvents = true;
+        PropertyChanged += (s, e) =>
+        {
+            return;
+        };
+        ValueChanged += (s, e) =>
+        {
+            return;
+        };
+        Count = 1;
+        //Command1.AddNotifyReceiver(Str1);
+        //Command1.NotifyCanExecuteReceived += Command1_NotifyCanExecuteReceived;
         //Command1.ExecuteEvent += Command1_ExecuteEvent;
         //Command1.AsyncExecuteEvent += Command1_AsyncExecuteEvent;
         //ClickCommand.CanExecuteChanged += ClickCommand_CanExecuteChanged;
