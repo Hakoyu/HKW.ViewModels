@@ -8,7 +8,7 @@
 		<RootNamespace>HKW.HKWViewModels</RootNamespace>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.6.3</Version>
+		<Version>0.6.5</Version>
 		<RepositoryType>https://github.com/Hakoyu/HKW.ViewModels</RepositoryType>
 		<IncludeSymbols>False</IncludeSymbols>
 		<Authors>HKW</Authors>
@@ -19,7 +19,6 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="HKW.Utils" Version="0.2.3" />
-		<PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" Version="16.205.1" />
 	</ItemGroup>
 
 	<ItemGroup>
