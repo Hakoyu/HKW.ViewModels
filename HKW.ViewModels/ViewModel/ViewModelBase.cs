@@ -1,8 +1,13 @@
-﻿using System;
+﻿using HKW.HKWUtils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,59 +16,38 @@ namespace HKW.HKWViewModels;
 /// <summary>
 /// 基础视图模型
 /// </summary>
-public abstract class ViewModelBase : ObservableObject
+public abstract class ViewModelBase<T> : ObservableObject
+    where T : ViewModelBase<T>
 {
-    /// <summary>
-    /// 启用后会在触发 <see cref="ObservableObject.PropertyChanged"/> 时触发 <see cref="ValueChanged"/>
-    /// </summary>
-    [DefaultValue(false)]
-    public bool EnableValueChangeEvents { get; set; } = false;
-
-    /// <summary>
-    /// 类型
-    /// </summary>
-    private readonly Type _type;
-
     /// <summary>
     /// 旧值
     /// </summary>
-    public object? _oldValue = null;
+    private object? _oldValue = null;
 
     /// <summary>
     /// 新值
     /// </summary>
-    public object? _newValue = null;
-
-    /// <inheritdoc/>
-    public ViewModelBase()
-    {
-        _type = GetType();
-    }
-
-    /// <inheritdoc/>
-    /// <param name="enableValueChangeEvents">启用值改变事件</param>
-    public ViewModelBase(bool enableValueChangeEvents)
-        : this()
-    {
-        EnableValueChangeEvents = enableValueChangeEvents;
-    }
+    private object? _newValue = null;
 
     /// <inheritdoc/>
     protected override void OnPropertyChanging(PropertyChangingEventArgs e)
     {
         base.OnPropertyChanging(e);
-        if (EnableValueChangeEvents && ValueChanged is not null)
+        if (ValueChanged is not null)
+        {
             _oldValue = GetPropertyValue(e.PropertyName);
+        }
     }
 
     /// <inheritdoc/>
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (EnableValueChangeEvents && ValueChanged is not null)
+        if (ValueChanged is not null)
         {
             _newValue = GetPropertyValue(e.PropertyName);
-            ValueChanged?.Invoke(this, new(e.PropertyName, _oldValue, _newValue));
+            ValueChanged?.Invoke((T)this, new(e.PropertyName, _oldValue, null));
+            _oldValue = _newValue = null;
         }
     }
 
@@ -76,19 +60,20 @@ public abstract class ViewModelBase : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(propertyName))
             return null;
-        return _type.GetProperty(propertyName)?.GetValue(this);
+        return PropertyCallAdapterProvider<T>.GetInstance(propertyName)?.InvokeGet((T)this);
+        //return typeof(T).GetProperty(propertyName)?.GetValue(this);
     }
 
     /// <summary>
     /// 属性值改变后事件参数
     /// </summary>
     public event ValueChangedEventHandler? ValueChanged;
-}
 
-/// <summary>
-/// 属性值改变后事件参数
-/// </summary>
-public delegate void ValueChangedEventHandler(ObservableObject sender, ValueChangedEventArgs e);
+    /// <summary>
+    /// 属性值改变后事件参数
+    /// </summary>
+    public delegate void ValueChangedEventHandler(T sender, ValueChangedEventArgs e);
+}
 
 /// <summary>
 /// 属性值改变后事件参数
@@ -117,7 +102,6 @@ public class ValueChangedEventArgs : PropertyChangedEventArgs
         NewValue = newValue;
     }
 }
-
 
 ///// <summary>
 ///// 属性值改变前事件
@@ -149,4 +133,102 @@ public class ValueChangedEventArgs : PropertyChangedEventArgs
 //        OldValue = oldValue;
 //        NewValue = newValue;
 //    }
+//}
+
+//public abstract class ObservableObject1
+//{
+//    protected bool SetProperty<T>(
+//        [NotNullIfNotNull(nameof(newValue))] ref T field,
+//        T newValue,
+//        [CallerMemberName] string? propertyName = null
+//    )
+//    {
+//        if (EqualityComparer<T>.Default.Equals(field, newValue))
+//        {
+//            return false;
+//        }
+//        var oldValue = field;
+//        //OnPropertyChanging(propertyName);
+//        if (AnotherPropertyChanging is not null)
+//            AnotherPropertyChanging?.Invoke(this, new(propertyName, oldValue, newValue));
+//        field = newValue;
+
+//        //OnPropertyChanged(propertyName);
+//        if (AnotherPropertyChanged is not null)
+//            AnotherPropertyChanged?.Invoke(this, new(propertyName, oldValue, newValue));
+//        return true;
+//    }
+
+//    public event AnotherPropertyChangingEventHandler? AnotherPropertyChanging;
+//    public event AnotherPropertyChangedEventHandler? AnotherPropertyChanged;
+//}
+
+//public delegate void AnotherPropertyChangingEventHandler(
+//    object sender,
+//    AnotherPropertyChangingEventArgs e
+//);
+//public delegate void AnotherPropertyChangedEventHandler(
+//    object sender,
+//    AnotherPropertyChangedEventArgs e
+//);
+
+//public class AnotherPropertyChangingEventArgs : PropertyChangingEventArgs
+//{
+//    public object? OldValue { get; }
+
+//    public object? NewValue { get; }
+
+//    public AnotherPropertyChangingEventArgs(
+//        string? propertyName,
+//        object? oldValue,
+//        object? newValue
+//    )
+//        : base(propertyName)
+//    {
+//        OldValue = oldValue;
+//        NewValue = newValue;
+//    }
+//}
+
+//public class AnotherPropertyChangedEventArgs : PropertyChangedEventArgs
+//{
+//    public object? OldValue { get; }
+
+//    public object? NewValue { get; }
+
+//    public AnotherPropertyChangedEventArgs(string? propertyName, object? oldValue, object? newValue)
+//        : base(propertyName)
+//    {
+//        OldValue = oldValue;
+//        NewValue = newValue;
+//    }
+//}
+
+//public partial class MainWindowViewModel : ObservableObject
+//{
+//    AnotherViewModel anotherViewModel = new();
+
+//    [ObservableProperty]
+//    private int _oldValue = 0;
+
+//    [ObservableProperty]
+//    private int _newValue = 0;
+
+//    public MainWindowViewModel()
+//    {
+//        anotherViewModelAnotherPropertyChanged += (s, e) =>
+//        {
+//            if (e.PropertyName == nameof(MainWindowViewModel.Value))
+//            {
+//                OldValue = e.OldValue;
+//                NewValue = e.NewValue;
+//            }
+//        };
+//    }
+//}
+
+//public partial class AnotherViewModel : ObservableObject
+//{
+//    [ObservableProperty]
+//    private int _value = 0;
 //}

@@ -11,11 +11,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels;
 using HKW.HKWViewModels.SimpleObservable;
-using HKW.HKWViewModels;
 
 namespace HKW.VIewModels.TestOnWPF;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase<MainWindowViewModel>
 {
     public static ObservableI18nCore I18nCore { get; } = new() { };
 
@@ -39,7 +38,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        EnableValueChangeEvents = true;
         PropertyChanged += (s, e) =>
         {
             return;
