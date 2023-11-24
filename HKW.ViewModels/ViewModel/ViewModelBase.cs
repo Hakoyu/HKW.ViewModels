@@ -46,7 +46,7 @@ public abstract class ViewModelBase<T> : ObservableObject
         if (ValueChanged is not null)
         {
             _newValue = GetPropertyValue(e.PropertyName);
-            ValueChanged?.Invoke((T)this, new(e.PropertyName, _oldValue, null));
+            ValueChanged?.Invoke((T)this, new(e.PropertyName, _oldValue, _newValue));
             _oldValue = _newValue = null;
         }
     }
