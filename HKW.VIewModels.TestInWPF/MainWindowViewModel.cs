@@ -31,6 +31,9 @@ public partial class MainWindowViewModel : ViewModelBase<MainWindowViewModel>
     [ObservableProperty]
     private int _count = 0;
 
+    [ObservableProperty]
+    private object? _test = null;
+
     public ObservableCommand Command1 { get; } = new();
 
     public ObservableValue<string> Str1 { get; } = new("114514");
@@ -44,9 +47,11 @@ public partial class MainWindowViewModel : ViewModelBase<MainWindowViewModel>
         };
         ValueChanged += (s, e) =>
         {
+            var (o, n) = e.GetValue<string>();
             return;
         };
-        Count = 1;
+        Test = "114514";
+        Test = null;
         //Command1.AddNotifyReceiver(Str1);
         //Command1.NotifyCanExecuteReceived += Command1_NotifyCanExecuteReceived;
         //Command1.ExecuteEvent += Command1_ExecuteEvent;

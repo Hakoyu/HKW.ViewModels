@@ -101,6 +101,16 @@ public class ValueChangedEventArgs : PropertyChangedEventArgs
         OldValue = oldValue;
         NewValue = newValue;
     }
+
+    /// <summary>
+    /// 获取值
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    /// <returns>(OldValue, NewValue)</returns>
+    public (T, T) GetValue<T>()
+    {
+        return ((T)OldValue!, (T)NewValue!);
+    }
 }
 
 ///// <summary>
