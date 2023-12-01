@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels;
-using HKW.HKWViewModels.SimpleObservable;
+using HKW.HKWViewModels;
 
 namespace HKW.VIewModels.TestOnWPF;
 
@@ -33,11 +33,6 @@ public partial class MainWindowViewModel : ViewModelBase<MainWindowViewModel>
 
     [ObservableProperty]
     private object? _test = null;
-
-    public ObservableCommand Command1 { get; } = new();
-
-    public ObservableValue<string> Str1 { get; } = new("114514");
-    public ObservableValue<string> Str2 { get; } = new();
 
     public MainWindowViewModel()
     {
@@ -63,16 +58,6 @@ public partial class MainWindowViewModel : ViewModelBase<MainWindowViewModel>
         //value2.Value = "B";
         //group.Remove(value1);
         //value1.Value = "C";
-    }
-
-    private void Command1_NotifyCanExecuteReceived(ref bool value)
-    {
-        value = Str1.Value == "114514";
-    }
-
-    private void Str2_NotifiedPropertyChange(ref string value)
-    {
-        value = Str1.Value + "1919810";
     }
 
     private void ClickCommand_CanExecuteChanged(object? sender, EventArgs e)
