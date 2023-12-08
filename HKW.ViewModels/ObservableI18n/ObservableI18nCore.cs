@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
-using System.Threading;
 
 namespace HKW.HKWViewModels;
 

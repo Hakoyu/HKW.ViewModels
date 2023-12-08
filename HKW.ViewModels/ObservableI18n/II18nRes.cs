@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HKW.HKWViewModels.ObservableI18n;
+﻿namespace HKW.HKWViewModels.ObservableI18n;
 
 /// <summary>
 /// I18n资源接口

@@ -1,6 +1,4 @@
 ﻿#if DEBUG
-using System;
-
 #endif
 
 namespace HKW.HKWViewModels;
