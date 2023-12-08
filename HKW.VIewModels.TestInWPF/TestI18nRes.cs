@@ -4,7 +4,7 @@ namespace HKW.VIewModels.TestOnWPF;
 
 public class TestI18nRes
 {
-    private static I18nRes I18nRes { get; } =
+    private static I18nResource I18nRes { get; } =
         new(MainWindowViewModel.I18nCore) { CanOverride = true };
     public static string Name => I18nRes.GetCultureData(nameof(Name));
 

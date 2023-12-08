@@ -5,7 +5,7 @@ namespace HKW.HKWViewModels;
 /// <summary>
 /// 可观察的I18n资源
 /// </summary>
-public class ObservableI18nRes : INotifyPropertyChanged
+public class ObservableI18nResource : INotifyPropertyChanged
 {
     /// <summary>
     /// 资源名称
@@ -20,7 +20,7 @@ public class ObservableI18nRes : INotifyPropertyChanged
     /// <inheritdoc/>
     /// <param name="resName">资源名称</param>
     /// <param name="i18nRes">资源</param>
-    protected ObservableI18nRes(string resName, object i18nRes)
+    protected ObservableI18nResource(string resName, object i18nRes)
     {
         ResName = resName;
         I18nRes = i18nRes;

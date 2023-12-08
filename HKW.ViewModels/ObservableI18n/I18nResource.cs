@@ -11,11 +11,11 @@ namespace HKW.HKWViewModels;
 /// {
 ///     public static ObservableI18nCore I18nCore { get; } = new();
 ///     [ObservableProperty]
-///     public ObservableI18nRes<TestI18nRes> _i18n = I18nCore.Create<TestI18nRes>(new());
+///     public ObservableI18nResource<TestI18nResource> _i18n = I18nCore.Create<TestI18nResource>(new());
 /// }
-/// public class TestI18nRes : II18nRes
+/// public class TestI18nResource : II18nResource
 /// {
-///     public static I18nRes I18nRes { get; } =
+///     public static I18nResource I18nResource { get; } =
 ///          new(MainWindowViewModel.I18nCore);
 ///     public static string Name => GetCultureData(nameof(Name));
 /// }
@@ -23,7 +23,7 @@ namespace HKW.HKWViewModels;
 /// </code>
 /// </para>
 /// </summary>
-public class I18nRes
+public class I18nResource
 {
     /// <summary>
     /// 严格模式 默认为: <see langword="false"/>
@@ -53,11 +53,11 @@ public class I18nRes
     /// <summary>
     /// 注册文化改变事件
     /// </summary>
-    public I18nRes(ObservableI18nCore core)
+    public I18nResource(ObservableI18nCore core)
     {
-        core.CultureChanged += (v) =>
+        core.CultureChanged += (s, e) =>
         {
-            SetCurrentCulture(v.Name);
+            SetCurrentCulture(e.CultureInfo.Name);
         };
     }
 

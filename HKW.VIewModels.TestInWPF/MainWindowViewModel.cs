@@ -11,7 +11,7 @@ public partial class MainWindowViewModel : ObservableObject
     public static ObservableI18nCore I18nCore { get; } = new() { };
 
     [ObservableProperty]
-    private ObservableI18nRes<TestI18nRes> _i18n = I18nCore.Create<TestI18nRes>(new());
+    private ObservableI18nResource<TestI18nRes> _i18n = I18nCore.Create<TestI18nRes>(new());
 
     [ObservableProperty]
     private bool _showCanExecute = true;

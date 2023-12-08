@@ -19,8 +19,9 @@ public class ObservableI18nCore
 
     /// <summary>
     /// 本地化资源实例集合
+    /// <para>(ResourceName, ObservableI18nResource)</para>
     /// </summary>
-    protected Dictionary<string, ObservableI18nRes> AllObservableI18nRes { get; } = new();
+    protected Dictionary<string, ObservableI18nResource> ObservableI18nResources { get; } = new();
 
     private CultureInfo _currentCulture = CultureInfo.CurrentCulture;
 
@@ -53,22 +54,22 @@ public class ObservableI18nCore
     /// {
     ///     public static ObservableI18nCore I18nCore { get; } = new();
     ///     [ObservableProperty]
-    ///     public ObservableI18nRes<TestI18nRes> _i18n = I18nCore.Create<TestI18nRes>(new());
+    ///     public ObservableI18nResource<TestI18nResource> _i18n = I18nCore.Create<TestI18nResource>(new());
     /// }
     /// ]]>
     /// </code></para>
     /// </summary>
-    /// <typeparam name="TI18nRes">资源类型</typeparam>
-    /// <param name="i18nRes">I18n资源</param>
+    /// <typeparam name="TResource">资源类型</typeparam>
+    /// <param name="resource">I18n资源</param>
     /// <returns>可观察的I18n资源</returns>
-    public ObservableI18nRes<TI18nRes> Create<TI18nRes>(TI18nRes i18nRes)
-        where TI18nRes : class
+    public ObservableI18nResource<TResource> Create<TResource>(TResource resource)
+        where TResource : class
     {
-        var name = i18nRes.GetType().FullName!;
-        if (AllObservableI18nRes.TryGetValue(name, out var value))
-            return (ObservableI18nRes<TI18nRes>)value;
-        var res = new ObservableI18nRes<TI18nRes>(i18nRes);
-        AllObservableI18nRes.Add(name, res);
+        var name = resource.GetType().FullName!;
+        if (ObservableI18nResources.TryGetValue(name, out var value))
+            return (ObservableI18nResource<TResource>)value;
+        var res = new ObservableI18nResource<TResource>(resource);
+        ObservableI18nResources.Add(name, res);
         Refresh(name);
         return res;
     }
@@ -79,8 +80,8 @@ public class ObservableI18nCore
     /// <param name="resName">资源名称</param>
     public void Refresh(string resName)
     {
-        CultureChanged?.Invoke(CurrentCulture);
-        var observableI18n = AllObservableI18nRes[resName];
+        CultureChanged?.Invoke(this, new(CurrentCulture));
+        var observableI18n = ObservableI18nResources[resName];
         observableI18n.Refresh();
     }
 
@@ -89,8 +90,8 @@ public class ObservableI18nCore
     /// </summary>
     public void RefreshAll()
     {
-        CultureChanged?.Invoke(CurrentCulture);
-        foreach (var observableI18nRes in AllObservableI18nRes.Values)
+        CultureChanged?.Invoke(this, new(CurrentCulture));
+        foreach (var observableI18nRes in ObservableI18nResources.Values)
             observableI18nRes.Refresh();
     }
 
@@ -111,7 +112,7 @@ public class ObservableI18nCore
     /// <returns>源的返回值</returns>
     public T BindingValue<T>(Action<T> setTargetValue, Func<T> getSourceValue)
     {
-        CultureChanged += (culture) => setTargetValue(getSourceValue());
+        CultureChanged += (s, e) => setTargetValue(getSourceValue());
         return getSourceValue();
     }
 
@@ -138,7 +139,7 @@ public class ObservableI18nCore
     )
         where TTarget : class
     {
-        CultureChanged += (culture) => setTargetValue(getSourceValue(), target);
+        CultureChanged += (s, e) => setTargetValue(getSourceValue(), target);
         return getSourceValue();
     }
 
@@ -169,7 +170,7 @@ public class ObservableI18nCore
         CultureChanged += CultureChangedEvent;
         return getSourceValue();
 
-        void CultureChangedEvent(CultureInfo culture)
+        void CultureChangedEvent(object? sender, CultureChangedEventArgs e)
         {
             if (weakReference.TryGetTarget(out var target))
                 setTargetValue(getSourceValue(), target);
