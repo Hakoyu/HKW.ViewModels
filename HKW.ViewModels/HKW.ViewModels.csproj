@@ -8,7 +8,7 @@
 		<RootNamespace>HKW.HKWViewModels</RootNamespace>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.7.2</Version>
+		<Version>0.7.3</Version>
 		<RepositoryType>https://github.com/Hakoyu/HKW.ViewModels</RepositoryType>
 		<IncludeSymbols>False</IncludeSymbols>
 		<Authors>HKW</Authors>
@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="HKW.FastMember" Version="1.0.0" />
 		<PackageReference Include="HKW.Utils" Version="0.4.5" />
 	</ItemGroup>
 

@@ -1,6 +1,8 @@
 ﻿#if DEBUG
 #endif
 
+using HKW.HKWUtils.Observable;
+
 namespace HKW.HKWViewModels;
 
 internal class Program
@@ -8,7 +10,11 @@ internal class Program
     private static void Main(string[] args)
     {
 #if DEBUG
-        Console.WriteLine("Hello, World!");
+
 #endif
     }
 }
+
+#if DEBUG
+
+#endif
