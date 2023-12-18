@@ -13,12 +13,32 @@
   <d:Window.DataContext>
     <local:MainWindowViewModel />
   </d:Window.DataContext>
-  <StackPanel Background="Beige">
-    <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
-    <TextBlock Text="{Binding Text}" />
-    <Button
-      x:Name="Button_1"
-      Command="{Binding CultureChangeCommand}"
-      Content="Button" />
-  </StackPanel>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <StackPanel Background="Beige">
+      <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+      <TextBlock Text="{Binding Text}" />
+      <Button
+        x:Name="Button_1"
+        Command="{Binding CultureChangeCommand}"
+        Content="Button" />
+    </StackPanel>
+    <Grid Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+      <CheckBox Content="Leader" IsChecked="{Binding CheckGroup.LeaderIsChecked}" />
+      <ListBox Grid.Row="1" ItemsSource="{Binding Tests}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+  </Grid>
 </Window>

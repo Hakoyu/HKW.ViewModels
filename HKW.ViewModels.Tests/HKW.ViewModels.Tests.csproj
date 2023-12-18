@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>HKW.HKWViewModel.Tests</RootNamespace>
+    <RootNamespace>HKW.HKWViewModels.Tests</RootNamespace>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 

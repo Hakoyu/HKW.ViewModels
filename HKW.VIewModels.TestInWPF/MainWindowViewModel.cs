@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKW.HKWUtils.Observable;
 using HKW.HKWViewModels;
 using System;
 using System.Globalization;
+using System.Linq;
 
 namespace HKW.VIewModels.TestOnWPF;
 
@@ -23,9 +25,18 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private string _text;
 
-    //public ObservableValue<string> Text = new();
+    [ObservableProperty]
+    private CheckGroup _checkGroup = new();
 
-    public MainWindowViewModel() { }
+    //public ObservableValue<string> Text = new();
+    public ObservableList<Test> Tests { get; set; } =
+        new(Enumerable.Range(0, 100).Select(i => new Test() { Name = i.ToString() }));
+
+    public MainWindowViewModel()
+    {
+        foreach (var test in Tests)
+            CheckGroup.CheckInfos.Add(test);
+    }
 
     private void ClickCommand_CanExecuteChanged(object? sender, EventArgs e)
     {
@@ -53,10 +64,16 @@ public partial class MainWindowViewModel : ObservableObject
     }
 }
 
-public partial class Test : ObservableObject
+public partial class Test : ObservableObject, ICheckInfo
 {
     [ObservableProperty]
     private string? _name;
+
+    [ObservableProperty]
+    private bool _isChecked;
+
+    [ObservableProperty]
+    private bool _canCheck = true;
 }
 
 public static class CultureName
