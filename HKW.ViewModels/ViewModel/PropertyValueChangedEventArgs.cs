@@ -7,7 +7,7 @@ namespace HKW.HKWViewModels;
 /// 属性值改变后事件参数
 /// </summary>
 [DebuggerDisplay("PropertyName = {PropertyName}")]
-public class ValueChangedEventArgs : CancelEventArgs
+public class PropertyValueChangedEventArgs : CancelEventArgs
 {
     /// <summary>
     /// 属性名
@@ -28,7 +28,7 @@ public class ValueChangedEventArgs : CancelEventArgs
     /// <param name="propertyName">属性名</param>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
-    public ValueChangedEventArgs(string propertyName, object? oldValue, object? newValue)
+    public PropertyValueChangedEventArgs(string propertyName, object? oldValue, object? newValue)
     {
         PropertyName = propertyName;
         OldValue = oldValue;

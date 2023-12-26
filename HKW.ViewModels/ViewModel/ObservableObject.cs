@@ -7,8 +7,8 @@ namespace HKW.HKWViewModels;
 /// <summary>
 /// 基础视图模型
 /// </summary>
-public abstract class ViewModelBase<T> : ObservableObject
-    where T : ViewModelBase<T>
+public abstract class ObservableObject<T> : ObservableObject
+    where T : ObservableObject<T>
 {
     /// <summary>
     /// 旧值
@@ -34,7 +34,7 @@ public abstract class ViewModelBase<T> : ObservableObject
     private readonly ObjectAccessor _accessor;
 
     /// <inheritdoc/>
-    public ViewModelBase()
+    public ObservableObject()
     {
         _accessor = ObjectAccessor.Create(this);
     }
@@ -70,7 +70,7 @@ public abstract class ViewModelBase<T> : ObservableObject
             _valueChangeProperties.Add(e.PropertyName!);
             _newValue = _accessor[e.PropertyName];
             // 获取属性新值
-            var args = new ValueChangedEventArgs(e.PropertyName!, _oldValue, _newValue);
+            var args = new PropertyValueChangedEventArgs(e.PropertyName!, _oldValue, _newValue);
             // 触发事件
             ValueChanged?.Invoke((T)this, args);
             // 取消赋值
@@ -107,5 +107,5 @@ public abstract class ViewModelBase<T> : ObservableObject
     /// // result: vm.Value == newValue2, triggerCount == 1
     /// ]]></code></para>
     /// </summary>
-    public event ValueChangedEventHandler<T>? ValueChanged;
+    public event PropertyValueChangedEventHandler<T>? ValueChanged;
 }

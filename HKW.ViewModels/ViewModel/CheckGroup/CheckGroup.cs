@@ -12,7 +12,7 @@ namespace HKW.HKWViewModels;
 /// <summary>
 /// 检查组
 /// </summary>
-public partial class CheckGroup : ViewModelBase<CheckGroup>
+public partial class CheckGroup : ObservableObject<CheckGroup>
 {
     /// <summary>
     /// 队长已检查

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HKW.HKWViewModels.Tests;
 
-public class ExampleViewModel : ViewModelBase<ExampleViewModel>
+public class ExampleViewModel : ObservableObject<ExampleViewModel>
 {
     public static int Value1Default => 114;
     private int _value1 = Value1Default;

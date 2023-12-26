@@ -9,4 +9,4 @@ namespace HKW.HKWViewModels;
 /// <summary>
 /// 属性值改变后事件
 /// </summary>
-public delegate void ValueChangedEventHandler<T>(T sender, ValueChangedEventArgs e);
+public delegate void PropertyValueChangedEventHandler<T>(T sender, PropertyValueChangedEventArgs e);
