@@ -2,13 +2,13 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>HKW.HKWViewModels</RootNamespace>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.7.5</Version>
+		<Version>1.0.0</Version>
 		<RepositoryType>https://github.com/Hakoyu/HKW.ViewModels</RepositoryType>
 		<IncludeSymbols>False</IncludeSymbols>
 		<Authors>HKW</Authors>
@@ -19,7 +19,7 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="HKW.FastMember" Version="1.0.0" />
-		<PackageReference Include="HKW.Utils" Version="0.4.5" />
+		<PackageReference Include="HKW.Utils" Version="1.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>
